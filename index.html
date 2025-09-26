@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Playful Calendar</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      margin: 0;
+    }
+
+    .calendar {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    .month-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #ff6f61;
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 55px);
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .day {
+      position: relative;
+      width: 55px;
+      height: 55px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 14px;
+      background: #fceabb;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      transition: transform 0.2s;
+      overflow: hidden;
+    }
+
+    .day:hover {
+      transform: scale(1.1);
+    }
+
+    /* Cross effect */
+    .day.crossed::after, 
+    .day.crossed::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -20%;
+      height: 12px;
+      width: 0;
+      border-radius: 12px;
+      transform: rotate(-20deg);
+      animation: brushStroke 0.6s forwards ease-out;
+    }
+
+    .day.crossed::after {
+      background: linear-gradient(90deg, rgba(255,99,71,0.9), rgba(255,140,0,0.8));
+      box-shadow: 0 0 8px rgba(255,99,71,0.4);
+    }
+
+    .day.crossed::before {
+      background: linear-gradient(90deg, rgba(255,165,0,0.6), rgba(255,69,0,0.6));
+      top: 55%;
+      height: 6px;
+      transform: rotate(-18deg);
+      animation-delay: 0.1s;
+    }
+
+    @keyframes brushStroke {
+      to {
+        width: 150%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calendar">
+    <div class="month-title" id="monthTitle"></div>
+    <div class="days" id="days"></div>
+  </div>
+
+  <script>
+    const daysContainer = document.getElementById('days');
+    const monthTitle = document.getElementById('monthTitle');
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const monthName = now.toLocaleString('default', { month: 'long' });
+
+    monthTitle.textContent = `${monthName} ${year}`;
+
+    const firstDay = new Date(year, month, 1).getDay(); // Sunday=0
+    const totalDays = new Date(year, month + 1, 0).getDate();
+
+    // Create a unique key for storage (month+year)
+    const storageKey = `crossedDays-${year}-${month}`;
+    const savedCrossed = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+    // Add empty spots before first day
+    for (let i = 0; i < firstDay; i++) {
+      const empty = document.createElement('div');
+      empty.classList.add('day');
+      empty.style.visibility = "hidden";
+      daysContainer.appendChild(empty);
+    }
+
+    // Add days
+    for (let d = 1; d <= totalDays; d++) {
+      const dayEl = document.createElement('div');
+      dayEl.classList.add('day');
+      dayEl.textContent = d;
+
+      // Restore crossed state from storage
+      if (savedCrossed.includes(d)) {
+        dayEl.classList.add('crossed');
+      }
+
+      // Toggle cross on click
+      dayEl.addEventListener('click', () => {
+        dayEl.classList.toggle('crossed');
+
+        let crossed = JSON.parse(localStorage.getItem(storageKey)) || [];
+        if (dayEl.classList.contains('crossed')) {
+          crossed.push(d);
+        } else {
+          crossed = crossed.filter(num => num !== d);
+        }
+        localStorage.setItem(storageKey, JSON.stringify(crossed));
+      });
+
+      daysContainer.appendChild(dayEl);
+    }
+  </script>
+</body>
+</html>
