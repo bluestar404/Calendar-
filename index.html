@@ -2,16 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Playful Calendar</title>
+  <title>Playful Year Calendar</title>
   <style>
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
+      align-items: flex-start;
+      min-height: 100vh;
       background: linear-gradient(135deg, #fdfbfb, #ebedee);
       margin: 0;
+      padding: 20px;
+      flex-wrap: wrap;
     }
 
     .calendar {
@@ -20,10 +22,12 @@
       border-radius: 20px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
       text-align: center;
+      margin: 15px;
+      flex: 1 1 300px;
     }
 
     .month-title {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: bold;
       margin-bottom: 15px;
       color: #ff6f61;
@@ -31,23 +35,23 @@
 
     .days {
       display: grid;
-      grid-template-columns: repeat(7, 55px);
-      gap: 10px;
+      grid-template-columns: repeat(7, 40px);
+      gap: 6px;
       justify-content: center;
     }
 
     .day {
       position: relative;
-      width: 55px;
-      height: 55px;
+      width: 40px;
+      height: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 14px;
+      border-radius: 10px;
       background: #fceabb;
       cursor: pointer;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 14px;
       transition: transform 0.2s;
       overflow: hidden;
     }
@@ -56,14 +60,13 @@
       transform: scale(1.1);
     }
 
-    /* Cross effect */
     .day.crossed::after, 
     .day.crossed::before {
       content: "";
       position: absolute;
       top: 50%;
       left: -20%;
-      height: 12px;
+      height: 8px;
       width: 0;
       border-radius: 12px;
       transform: rotate(-20deg);
@@ -78,7 +81,7 @@
     .day.crossed::before {
       background: linear-gradient(90deg, rgba(255,165,0,0.6), rgba(255,69,0,0.6));
       top: 55%;
-      height: 6px;
+      height: 4px;
       transform: rotate(-18deg);
       animation-delay: 0.1s;
     }
@@ -91,63 +94,69 @@
   </style>
 </head>
 <body>
-  <div class="calendar">
-    <div class="month-title" id="monthTitle"></div>
-    <div class="days" id="days"></div>
-  </div>
+  <div id="calendarContainer"></div>
 
   <script>
-    const daysContainer = document.getElementById('days');
-    const monthTitle = document.getElementById('monthTitle');
+    const container = document.getElementById('calendarContainer');
+    const year = new Date().getFullYear();
 
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const monthName = now.toLocaleString('default', { month: 'long' });
+    const monthNames = Array.from({length: 12}, (_, i) => 
+      new Date(year, i).toLocaleString('default', { month: 'long' })
+    );
 
-    monthTitle.textContent = `${monthName} ${year}`;
+    monthNames.forEach((monthName, monthIndex) => {
+      const cal = document.createElement('div');
+      cal.classList.add('calendar');
 
-    const firstDay = new Date(year, month, 1).getDay(); // Sunday=0
-    const totalDays = new Date(year, month + 1, 0).getDate();
+      const title = document.createElement('div');
+      title.classList.add('month-title');
+      title.textContent = `${monthName} ${year}`;
+      cal.appendChild(title);
 
-    // Create a unique key for storage (month+year)
-    const storageKey = `crossedDays-${year}-${month}`;
-    const savedCrossed = JSON.parse(localStorage.getItem(storageKey)) || [];
+      const daysGrid = document.createElement('div');
+      daysGrid.classList.add('days');
 
-    // Add empty spots before first day
-    for (let i = 0; i < firstDay; i++) {
-      const empty = document.createElement('div');
-      empty.classList.add('day');
-      empty.style.visibility = "hidden";
-      daysContainer.appendChild(empty);
-    }
+      const firstDay = new Date(year, monthIndex, 1).getDay();
+      const totalDays = new Date(year, monthIndex + 1, 0).getDate();
+      const storageKey = `crossedDays-${year}-${monthIndex}`;
+      const savedCrossed = JSON.parse(localStorage.getItem(storageKey)) || [];
 
-    // Add days
-    for (let d = 1; d <= totalDays; d++) {
-      const dayEl = document.createElement('div');
-      dayEl.classList.add('day');
-      dayEl.textContent = d;
-
-      // Restore crossed state from storage
-      if (savedCrossed.includes(d)) {
-        dayEl.classList.add('crossed');
+      // Empty spots before first day
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.classList.add('day');
+        empty.style.visibility = "hidden";
+        daysGrid.appendChild(empty);
       }
 
-      // Toggle cross on click
-      dayEl.addEventListener('click', () => {
-        dayEl.classList.toggle('crossed');
+      // Days
+      for (let d = 1; d <= totalDays; d++) {
+        const dayEl = document.createElement('div');
+        dayEl.classList.add('day');
+        dayEl.textContent = d;
 
-        let crossed = JSON.parse(localStorage.getItem(storageKey)) || [];
-        if (dayEl.classList.contains('crossed')) {
-          crossed.push(d);
-        } else {
-          crossed = crossed.filter(num => num !== d);
+        if (savedCrossed.includes(d)) {
+          dayEl.classList.add('crossed');
         }
-        localStorage.setItem(storageKey, JSON.stringify(crossed));
-      });
 
-      daysContainer.appendChild(dayEl);
-    }
+        dayEl.addEventListener('click', () => {
+          dayEl.classList.toggle('crossed');
+
+          let crossed = JSON.parse(localStorage.getItem(storageKey)) || [];
+          if (dayEl.classList.contains('crossed')) {
+            crossed.push(d);
+          } else {
+            crossed = crossed.filter(num => num !== d);
+          }
+          localStorage.setItem(storageKey, JSON.stringify(crossed));
+        });
+
+        daysGrid.appendChild(dayEl);
+      }
+
+      cal.appendChild(daysGrid);
+      container.appendChild(cal);
+    });
   </script>
 </body>
 </html>
