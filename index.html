@@ -1,8 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Playful Year Calendar</title>
+  <title>Playful Current Month Calendar</title>
   <style>
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -17,6 +18,7 @@
     }
 
     .calendar {
+      display: none; /* hide all months by default */
       background: white;
       padding: 20px;
       border-radius: 20px;
@@ -24,6 +26,10 @@
       text-align: center;
       margin: 15px;
       flex: 1 1 300px;
+    }
+
+    .calendar.active {
+      display: block; /* only show current month */
     }
 
     .month-title {
@@ -99,6 +105,7 @@
   <script>
     const container = document.getElementById('calendarContainer');
     const year = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
 
     const monthNames = Array.from({length: 12}, (_, i) => 
       new Date(year, i).toLocaleString('default', { month: 'long' })
@@ -107,6 +114,9 @@
     monthNames.forEach((monthName, monthIndex) => {
       const cal = document.createElement('div');
       cal.classList.add('calendar');
+      if (monthIndex === currentMonth) {
+        cal.classList.add('active'); // show only current month
+      }
 
       const title = document.createElement('div');
       title.classList.add('month-title');
@@ -160,3 +170,4 @@
   </script>
 </body>
 </html>
+```
