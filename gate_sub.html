@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,170 +56,244 @@
       margin-top: 12px;
       color: #333;
     }
+
+    .remaining {
+      color: #007b55;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    #finalTotalBox {
+      flex: 1 1 100%;
+      background: #ffe8e6;
+      border: 2px solid #ff6f61;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <div class="subject">
+
+  <!-- C Programming -->
+  <div class="subject" data-total="36.44">
     <div class="subject-title">C Programming</div>
     <ul>
-      <li><input type="checkbox"> Module 7: 10.05 Hours</li>
-      <li><input type="checkbox"> Module 2: 6.53 Hours</li>
-      <li><input type="checkbox"> Module 3: 20.76 Hours</li>
+      <li><input type="checkbox" data-duration="10.05"> Module 7: 10.05 Hours</li>
+      <li><input type="checkbox" data-duration="6.53"> Module 2: 6.53 Hours</li>
+      <li><input type="checkbox" data-duration="20.76"> Module 3: 20.76 Hours</li>
     </ul>
     <div class="total">Total: 36.44 Hours</div>
+    <div class="remaining">Duration left: 36.44 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Engineering Maths -->
+  <div class="subject" data-total="66">
     <div class="subject-title">Engineering Maths</div>
     <ul>
-      <li><input type="checkbox"> Linear Algebra: 30 Hours</li>
-      <li><input type="checkbox"> Probability: 28 Hours</li>
-      <li><input type="checkbox"> Calculus: 8-10 Hours</li>
+      <li><input type="checkbox" data-duration="30"> Linear Algebra: 30 Hours</li>
+      <li><input type="checkbox" data-duration="28"> Probability: 28 Hours</li>
+      <li><input type="checkbox" data-duration="8"> Calculus: 8-10 Hours</li>
     </ul>
     <div class="total">Total: 66 Hours</div>
+    <div class="remaining">Duration left: 66 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Theory of Computation -->
+  <div class="subject" data-total="157.25">
     <div class="subject-title">Theory of Computation</div>
     <ul>
-      <li><input type="checkbox"> Module 1: 56.22 Hours</li>
-      <li><input type="checkbox"> Module 2: 53.77 Hours</li>
-      <li><input type="checkbox"> Module 3: 53.83 Hours</li>
-      <li><input type="checkbox"> Module 4: 11.28 Hours</li>
-      <li><input type="checkbox"> Module 5: 39.42 Hours</li>
-      <li><input type="checkbox"> Module 6: 17.58 Hours</li>
+      <li><input type="checkbox" data-duration="58.22"> Module 1: 58.22 Hours</li>
+      <li><input type="checkbox" data-duration="25.37"> Module 2: 25.37 Hours</li>
+      <li><input type="checkbox" data-duration="5.38"> Module 3: 5.38 Hours</li>
+      <li><input type="checkbox" data-duration="11.28"> Module 4: 11.28 Hours</li>
+      <li><input type="checkbox" data-duration="39.42"> Module 5: 39.42 Hours</li>
+      <li><input type="checkbox" data-duration="17.58"> Module 6: 17.58 Hours</li>
     </ul>
     <div class="total">Total: 157.25 Hours</div>
+    <div class="remaining">Duration left: 157.25 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Data Structures -->
+  <div class="subject" data-total="60.21">
     <div class="subject-title">Data Structures</div>
     <ul>
-      <li><input type="checkbox"> Linked List: 7.16 Hours</li>
-      <li><input type="checkbox"> Logarithm Basics: 2.18 Hours</li>
-      <li><input type="checkbox"> Asymptotic Notation/Analysis: 9.58 Hours</li>
-      <li><input type="checkbox"> Stack & Queue: 7.17 Hours</li>
-      <li><input type="checkbox"> Binary Trees: 8 Hours</li>
-      <li><input type="checkbox"> AVL Trees: 1.68 Hours</li>
-      <li><input type="checkbox"> Binary Heap: 8.85 Hours</li>
-      <li><input type="checkbox"> Hashing: 6.53 Hours</li>
-      <li><input type="checkbox"> Row & Column Major in Arrays: 0.77 Hours</li>
-      <li><input type="checkbox"> More Live Sessions: 6.15 Hours</li>
+      <li><input type="checkbox" data-duration="7.16"> Linked List: 7.16 Hours</li>
+      <li><input type="checkbox" data-duration="2.18"> Logarithm Basics: 2.18 Hours</li>
+      <li><input type="checkbox" data-duration="9.58"> Asymptotic Notation: 9.58 Hours</li>
+      <li><input type="checkbox" data-duration="7.17"> Stack & Queue: 7.17 Hours</li>
+      <li><input type="checkbox" data-duration="8"> Binary Trees: 8 Hours</li>
+      <li><input type="checkbox" data-duration="5.18"> AVL Trees: 5.18 Hours</li>
+      <li><input type="checkbox" data-duration="8.85"> Binary Heap: 8.85 Hours</li>
+      <li><input type="checkbox" data-duration="4.63"> Hashing: 4.63 Hours</li>
+      <li><input type="checkbox" data-duration="0.77"> Row & Column Major: 0.77 Hours</li>
+      <li><input type="checkbox" data-duration="6.15"> More Live Sessions: 6.15 Hours</li>
     </ul>
     <div class="total">Total: 60.21 Hours</div>
+    <div class="remaining">Duration left: 60.21 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Algorithms -->
+  <div class="subject" data-total="60.34">
     <div class="subject-title">Algorithms</div>
     <ul>
-      <li><input type="checkbox"> Why Study & Asymptotic: 9.95 Hours</li>
-      <li><input type="checkbox"> Time Comp. of Recursive Prg: 3.67 Hours</li>
-      <li><input type="checkbox"> Divide & Conquer (P-1): 4.95 Hours</li>
-      <li><input type="checkbox"> Max & Min of Nos: 2.9 Hours</li>
-      <li><input type="checkbox"> Divide & Conquer (P-2): 6 Hours</li>
-      <li><input type="checkbox"> Sorting Algorithms: 3.47 Hours</li>
-      <li><input type="checkbox"> BFS & DFS: 7 Hours</li>
-      <li><input type="checkbox"> Shortest Path Algorithms: 1.5 Hours</li>
-      <li><input type="checkbox"> Minimum Spanning Tree: 4.87 Hours</li>
-      <li><input type="checkbox"> Algorithms More Greedy: 3.67 Hours</li>
-      <li><input type="checkbox"> Dynamic Programming: 7.33 Hours</li>
-      <li><input type="checkbox"> More Dynamic Programming Algo: 1.43 Hours</li>
+      <li><input type="checkbox" data-duration="9.95"> Why Study & Asymptotic: 9.95 Hours</li>
+      <li><input type="checkbox" data-duration="3.67"> Time Comp. of Recursive Prg: 3.67 Hours</li>
+      <li><input type="checkbox" data-duration="4.95"> Divide & Conquer (P-1): 4.95 Hours</li>
+      <li><input type="checkbox" data-duration="2.9"> Max & Min of Nos: 2.9 Hours</li>
+      <li><input type="checkbox" data-duration="6"> Divide & Conquer (P-2): 6 Hours</li>
+      <li><input type="checkbox" data-duration="3.47"> Sorting Algorithms: 3.47 Hours</li>
+      <li><input type="checkbox" data-duration="7"> BFS & DFS: 7 Hours</li>
+      <li><input type="checkbox" data-duration="5.1"> Shortest Path Algorithms: 5.1 Hours</li>
+      <li><input type="checkbox" data-duration="4.87"> Minimum Spanning Tree: 4.87 Hours</li>
+      <li><input type="checkbox" data-duration="3.67"> Algorithms More Greedy: 3.67 Hours</li>
+      <li><input type="checkbox" data-duration="7.33"> Dynamic Programming: 7.33 Hours</li>
+      <li><input type="checkbox" data-duration="1.43"> More Dynamic Programming: 1.43 Hours</li>
     </ul>
     <div class="total">Total: 60.34 Hours</div>
+    <div class="remaining">Duration left: 60.34 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Digital Logic -->
+  <div class="subject" data-total="96.14">
     <div class="subject-title">Digital Logic</div>
     <ul>
-      <li><input type="checkbox"> Module 1: 26.72 Hours</li>
-      <li><input type="checkbox"> Module 2: 11.97 Hours</li>
-      <li><input type="checkbox"> Module 3: 14.93 Hours</li>
-      <li><input type="checkbox"> Module 4: 6.65 Hours</li>
-      <li><input type="checkbox"> Module 5: 35.87 Hours</li>
+      <li><input type="checkbox" data-duration="26.72"> Module 1: 26.72 Hours</li>
+      <li><input type="checkbox" data-duration="11.97"> Module 2: 11.97 Hours</li>
+      <li><input type="checkbox" data-duration="14.93"> Module 3: 14.93 Hours</li>
+      <li><input type="checkbox" data-duration="6.65"> Module 4: 6.65 Hours</li>
+      <li><input type="checkbox" data-duration="35.87"> Module 5: 35.87 Hours</li>
     </ul>
     <div class="total">Total: 96.14 Hours</div>
+    <div class="remaining">Duration left: 96.14 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Operating System -->
+  <div class="subject" data-total="75.5">
     <div class="subject-title">Operating System</div>
     <ul>
-      <li><input type="checkbox"> Intro to OS: 71.15 Hours</li>
-      <li><input type="checkbox"> File Systems: 4.35 Hours</li>
-      <li><input type="checkbox"> OS PQYs series: 15.76 Hours (Youtube)</li>
+      <li><input type="checkbox" data-duration="71.15"> Intro to OS: 71.15 Hours</li>
+      <li><input type="checkbox" data-duration="4.35"> File Systems: 4.35 Hours</li>
+      <li><input type="checkbox" data-duration="0.00"> OS PQYs series: 15.76 Hours</li>
     </ul>
-    <div class="total">Total: 75.5 Hours (Excluding PQYs)</div>
+    <div class="total">Total: 75.5 Hours</div>
+    <div class="remaining">Duration left: 75.5 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Computer Architecture -->
+  <div class="subject" data-total="69.18">
     <div class="subject-title">Computer Architecture</div>
     <ul>
-      <li><input type="checkbox"> Basic Comp. of Computer & Main Mem.: 14 Hours</li>
-      <li><input type="checkbox"> The CPU: 27.95 Hours</li>
-      <li><input type="checkbox"> Cache Memory: 11.43 Hours</li>
-      <li><input type="checkbox"> Pipeline: 11.45 Hours</li>
-      <li><input type="checkbox"> Floating Point Representation: 4.35 Hours</li>
+      <li><input type="checkbox" data-duration="14"> Basic Comp. of Computer & Main Mem.: 14 Hours</li>
+      <li><input type="checkbox" data-duration="27.95"> The CPU: 27.95 Hours</li>
+      <li><input type="checkbox" data-duration="11.43"> Cache Memory: 11.43 Hours</li>
+      <li><input type="checkbox" data-duration="11.45"> Pipeline: 11.45 Hours</li>
+      <li><input type="checkbox" data-duration="4.35"> Floating Point Representation: 4.35 Hours</li>
     </ul>
     <div class="total">Total: 69.18 Hours</div>
+    <div class="remaining">Duration left: 69.18 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Computer Networks -->
+  <div class="subject" data-total="77.03">
     <div class="subject-title">Computer Networks</div>
     <ul>
-      <li><input type="checkbox"> Module 1: 98.77 Hours</li>
-      <li><input type="checkbox"> Module 2: 28.73 Hours</li>
-      <li><input type="checkbox"> Module 3: 12 Hours</li>
-      <li><input type="checkbox"> Module 4: 15.03 Hours</li>
-      <li><input type="checkbox"> Module 5: 14.53 Hours</li>
-      <li><input type="checkbox"> Module 6: 1 Hour</li>
+      <li><input type="checkbox" data-duration="9.87"> Module 1: 9.87 Hours</li>
+      <li><input type="checkbox" data-duration="28.73"> Module 2: 28.73 Hours</li>
+      <li><input type="checkbox" data-duration="12"> Module 3: 12 Hours</li>
+      <li><input type="checkbox" data-duration="10.93"> Module 4: 10.93 Hours</li>
+      <li><input type="checkbox" data-duration="14.53"> Module 5: 14.53 Hours</li>
+      <li><input type="checkbox" data-duration="1"> Module 6: 1 Hour</li>
     </ul>
     <div class="total">Total: 77.03 Hours</div>
+    <div class="remaining">Duration left: 77.03 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Database Management Systems -->
+  <div class="subject" data-total="165">
     <div class="subject-title">Database Management Systems</div>
     <ul>
-      <li><input type="checkbox"> Module 1: 38 Hours</li>
-      <li><input type="checkbox"> Module 2: 16.5 Hours</li>
-      <li><input type="checkbox"> Module 3: 7.74 Hours</li>
-      <li><input type="checkbox"> Module 4: 22 Hours</li>
-      <li><input type="checkbox"> Module 5: 8 Hours</li>
-      <li><input type="checkbox"> Module 6: 32 Hours</li>
-      <li><input type="checkbox"> Module 7: 31.28 Hours</li>
-      <li><input type="checkbox"> Module 8: 9 Hours</li>
+      <li><input type="checkbox" data-duration="38"> Module 1: 38 Hours</li>
+      <li><input type="checkbox" data-duration="16.5"> Module 2: 16.5 Hours</li>
+      <li><input type="checkbox" data-duration="7.74"> Module 3: 7.74 Hours</li>
+      <li><input type="checkbox" data-duration="22"> Module 4: 22 Hours</li>
+      <li><input type="checkbox" data-duration="8"> Module 5: 8 Hours</li>
+      <li><input type="checkbox" data-duration="32"> Module 6: 32 Hours</li>
+      <li><input type="checkbox" data-duration="31.28"> Module 7: 31.28 Hours</li>
+      <li><input type="checkbox" data-duration="9"> Module 8: 9 Hours</li>
     </ul>
     <div class="total">Total: 165 Hours</div>
+    <div class="remaining">Duration left: 165 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Discrete Maths -->
+  <div class="subject" data-total="247.69">
     <div class="subject-title">Discrete Maths</div>
     <ul>
-      <li><input type="checkbox"> Module 1: 22.37 Hours</li>
-      <li><input type="checkbox"> Module 2: 34 mins</li>
-      <li><input type="checkbox"> Module 3: 32.78 Hours</li>
-      <li><input type="checkbox"> Module 4: 29.67 Hours</li>
-      <li><input type="checkbox"> Module 5: 43.65 Hours</li>
-      <li><input type="checkbox"> Module 6: 14.13 Hours</li>
-      <li><input type="checkbox"> Module 7: 19.73 Hours</li>
-      <li><input type="checkbox"> Module 8: 39.92 Hours</li>
+      <li><input type="checkbox" data-duration="22.37"> Module 1: 22.37 Hours</li>
+      <li><input type="checkbox" data-duration="0.57"> Module 2: 34 mins</li>
+      <li><input type="checkbox" data-duration="32.78"> Module 3: 32.78 Hours</li>
+      <li><input type="checkbox" data-duration="29.67"> Module 4: 29.67 Hours</li>
+      <li><input type="checkbox" data-duration="43.60"> Module 5: 43.60 Hours</li>
+      <li><input type="checkbox" data-duration="13.45"> Module 6: 14.13 Hours</li>
+      <li><input type="checkbox" data-duration="19.73"> Module 7: 19.73 Hours</li>
+      <li><input type="checkbox" data-duration="39.92"> Module 8: 39.92 Hours</li>
+      <li><input type="checkbox" data-duration="46.17"> Module 9: 46.17 Hours</li>
     </ul>
     <div class="total">Total: 247.69 Hours</div>
+    <div class="remaining">Duration left: 247.69 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Compiler Design -->
+  <div class="subject" data-total="47">
     <div class="subject-title">Compiler Design</div>
     <ul>
-      <li><input type="checkbox"> Module 1: 13.15 Hours</li>
-      <li><input type="checkbox"> Module 2: 16.5 Hours</li>
-      <li><input type="checkbox"> Module 3: 7.43 Hours</li>
-      <li><input type="checkbox"> Module 4: 19.66 Hours</li>
+      <li><input type="checkbox" data-duration="13.15"> Module 1: 13.15 Hours</li>
+      <li><input type="checkbox" data-duration="11.8"> Module 2: 11.8 Hours</li>
+      <li><input type="checkbox" data-duration="2.33"> Module 3: 2.33 Hours</li>
+      <li><input type="checkbox" data-duration="19.66"> Module 4: 19.66 Hours</li>
     </ul>
     <div class="total">Total: 47 Hours</div>
+    <div class="remaining">Duration left: 47 Hours</div>
   </div>
 
-  <div class="subject">
+  <!-- Final Total -->
+  <div class="subject" id="finalTotalBox" data-total="1158">
     <div class="subject-title">Final Total</div>
     <div class="total">1,158 Hours</div>
+    <div class="remaining">Duration left: 1,158 Hours</div>
   </div>
+
+  <script>
+    const subjects = document.querySelectorAll(".subject");
+
+    function updateTotals() {
+      let grandTotal = parseFloat(document.getElementById("finalTotalBox").dataset.total);
+      let grandRemaining = grandTotal;
+
+      subjects.forEach(subject => {
+        if (subject.id === "finalTotalBox") return;
+
+        const total = parseFloat(subject.dataset.total);
+        let remaining = total;
+
+        subject.querySelectorAll("input[type='checkbox']").forEach(cb => {
+          if (cb.checked) {
+            remaining -= parseFloat(cb.dataset.duration);
+          }
+        });
+
+        subject.querySelector(".remaining").textContent = `Duration left: ${remaining.toFixed(2)} Hours`;
+        grandRemaining -= (total - remaining);
+      });
+
+      document.querySelector("#finalTotalBox .remaining").textContent = `Duration left: ${grandRemaining.toFixed(2)} Hours`;
+    }
+
+    document.querySelectorAll("input[type='checkbox']").forEach(cb => {
+      cb.addEventListener("change", updateTotals);
+    });
+
+    updateTotals(); // initialize
+  </script>
 </body>
 </html>
-```
+
