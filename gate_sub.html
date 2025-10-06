@@ -1,0 +1,225 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GATE Subjects Planner</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      margin: 0;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+
+    .subject {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      margin: 15px;
+      flex: 1 1 400px;
+    }
+
+    .subject-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #ff6f61;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin: 8px 0;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+      accent-color: #ff6f61;
+    }
+
+    .total {
+      font-weight: bold;
+      margin-top: 12px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="subject">
+    <div class="subject-title">C Programming</div>
+    <ul>
+      <li><input type="checkbox"> Module 7: 10.05 Hours</li>
+      <li><input type="checkbox"> Module 2: 6.53 Hours</li>
+      <li><input type="checkbox"> Module 3: 20.76 Hours</li>
+    </ul>
+    <div class="total">Total: 36.44 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Engineering Maths</div>
+    <ul>
+      <li><input type="checkbox"> Linear Algebra: 30 Hours</li>
+      <li><input type="checkbox"> Probability: 28 Hours</li>
+      <li><input type="checkbox"> Calculus: 8-10 Hours</li>
+    </ul>
+    <div class="total">Total: 66 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Theory of Computation</div>
+    <ul>
+      <li><input type="checkbox"> Module 1: 56.22 Hours</li>
+      <li><input type="checkbox"> Module 2: 53.77 Hours</li>
+      <li><input type="checkbox"> Module 3: 53.83 Hours</li>
+      <li><input type="checkbox"> Module 4: 11.28 Hours</li>
+      <li><input type="checkbox"> Module 5: 39.42 Hours</li>
+      <li><input type="checkbox"> Module 6: 17.58 Hours</li>
+    </ul>
+    <div class="total">Total: 157.25 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Data Structures</div>
+    <ul>
+      <li><input type="checkbox"> Linked List: 7.16 Hours</li>
+      <li><input type="checkbox"> Logarithm Basics: 2.18 Hours</li>
+      <li><input type="checkbox"> Asymptotic Notation/Analysis: 9.58 Hours</li>
+      <li><input type="checkbox"> Stack & Queue: 7.17 Hours</li>
+      <li><input type="checkbox"> Binary Trees: 8 Hours</li>
+      <li><input type="checkbox"> AVL Trees: 1.68 Hours</li>
+      <li><input type="checkbox"> Binary Heap: 8.85 Hours</li>
+      <li><input type="checkbox"> Hashing: 6.53 Hours</li>
+      <li><input type="checkbox"> Row & Column Major in Arrays: 0.77 Hours</li>
+      <li><input type="checkbox"> More Live Sessions: 6.15 Hours</li>
+    </ul>
+    <div class="total">Total: 60.21 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Algorithms</div>
+    <ul>
+      <li><input type="checkbox"> Why Study & Asymptotic: 9.95 Hours</li>
+      <li><input type="checkbox"> Time Comp. of Recursive Prg: 3.67 Hours</li>
+      <li><input type="checkbox"> Divide & Conquer (P-1): 4.95 Hours</li>
+      <li><input type="checkbox"> Max & Min of Nos: 2.9 Hours</li>
+      <li><input type="checkbox"> Divide & Conquer (P-2): 6 Hours</li>
+      <li><input type="checkbox"> Sorting Algorithms: 3.47 Hours</li>
+      <li><input type="checkbox"> BFS & DFS: 7 Hours</li>
+      <li><input type="checkbox"> Shortest Path Algorithms: 1.5 Hours</li>
+      <li><input type="checkbox"> Minimum Spanning Tree: 4.87 Hours</li>
+      <li><input type="checkbox"> Algorithms More Greedy: 3.67 Hours</li>
+      <li><input type="checkbox"> Dynamic Programming: 7.33 Hours</li>
+      <li><input type="checkbox"> More Dynamic Programming Algo: 1.43 Hours</li>
+    </ul>
+    <div class="total">Total: 60.34 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Digital Logic</div>
+    <ul>
+      <li><input type="checkbox"> Module 1: 26.72 Hours</li>
+      <li><input type="checkbox"> Module 2: 11.97 Hours</li>
+      <li><input type="checkbox"> Module 3: 14.93 Hours</li>
+      <li><input type="checkbox"> Module 4: 6.65 Hours</li>
+      <li><input type="checkbox"> Module 5: 35.87 Hours</li>
+    </ul>
+    <div class="total">Total: 96.14 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Operating System</div>
+    <ul>
+      <li><input type="checkbox"> Intro to OS: 71.15 Hours</li>
+      <li><input type="checkbox"> File Systems: 4.35 Hours</li>
+      <li><input type="checkbox"> OS PQYs series: 15.76 Hours (Youtube)</li>
+    </ul>
+    <div class="total">Total: 75.5 Hours (Excluding PQYs)</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Computer Architecture</div>
+    <ul>
+      <li><input type="checkbox"> Basic Comp. of Computer & Main Mem.: 14 Hours</li>
+      <li><input type="checkbox"> The CPU: 27.95 Hours</li>
+      <li><input type="checkbox"> Cache Memory: 11.43 Hours</li>
+      <li><input type="checkbox"> Pipeline: 11.45 Hours</li>
+      <li><input type="checkbox"> Floating Point Representation: 4.35 Hours</li>
+    </ul>
+    <div class="total">Total: 69.18 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Computer Networks</div>
+    <ul>
+      <li><input type="checkbox"> Module 1: 98.77 Hours</li>
+      <li><input type="checkbox"> Module 2: 28.73 Hours</li>
+      <li><input type="checkbox"> Module 3: 12 Hours</li>
+      <li><input type="checkbox"> Module 4: 15.03 Hours</li>
+      <li><input type="checkbox"> Module 5: 14.53 Hours</li>
+      <li><input type="checkbox"> Module 6: 1 Hour</li>
+    </ul>
+    <div class="total">Total: 77.03 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Database Management Systems</div>
+    <ul>
+      <li><input type="checkbox"> Module 1: 38 Hours</li>
+      <li><input type="checkbox"> Module 2: 16.5 Hours</li>
+      <li><input type="checkbox"> Module 3: 7.74 Hours</li>
+      <li><input type="checkbox"> Module 4: 22 Hours</li>
+      <li><input type="checkbox"> Module 5: 8 Hours</li>
+      <li><input type="checkbox"> Module 6: 32 Hours</li>
+      <li><input type="checkbox"> Module 7: 31.28 Hours</li>
+      <li><input type="checkbox"> Module 8: 9 Hours</li>
+    </ul>
+    <div class="total">Total: 165 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Discrete Maths</div>
+    <ul>
+      <li><input type="checkbox"> Module 1: 22.37 Hours</li>
+      <li><input type="checkbox"> Module 2: 34 mins</li>
+      <li><input type="checkbox"> Module 3: 32.78 Hours</li>
+      <li><input type="checkbox"> Module 4: 29.67 Hours</li>
+      <li><input type="checkbox"> Module 5: 43.65 Hours</li>
+      <li><input type="checkbox"> Module 6: 14.13 Hours</li>
+      <li><input type="checkbox"> Module 7: 19.73 Hours</li>
+      <li><input type="checkbox"> Module 8: 39.92 Hours</li>
+    </ul>
+    <div class="total">Total: 247.69 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Compiler Design</div>
+    <ul>
+      <li><input type="checkbox"> Module 1: 13.15 Hours</li>
+      <li><input type="checkbox"> Module 2: 16.5 Hours</li>
+      <li><input type="checkbox"> Module 3: 7.43 Hours</li>
+      <li><input type="checkbox"> Module 4: 19.66 Hours</li>
+    </ul>
+    <div class="total">Total: 47 Hours</div>
+  </div>
+
+  <div class="subject">
+    <div class="subject-title">Final Total</div>
+    <div class="total">1,158 Hours</div>
+  </div>
+</body>
+</html>
+```
