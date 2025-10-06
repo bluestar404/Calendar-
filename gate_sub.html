@@ -73,11 +73,11 @@
 </head>
 <body>
 
-  <!-- C Programming -->
+  <!-- Example Subjects (same as your original code) -->
   <div class="subject" data-total="36.44">
     <div class="subject-title">C Programming</div>
     <ul>
-      <li><input type="checkbox" data-duration="10.05"> Module 7: 10.05 Hours</li>
+      <li><input type="checkbox" data-duration="10.05"> Module 1: 10.05 Hours</li>
       <li><input type="checkbox" data-duration="5.63"> Module 2: 5.63 Hours</li>
       <li><input type="checkbox" data-duration="20.76"> Module 3: 20.76 Hours</li>
     </ul>
@@ -85,7 +85,7 @@
     <div class="remaining">Duration left: 36.44 Hours</div>
   </div>
 
-  <!-- Engineering Maths -->
+ <!-- Engineering Maths -->
   <div class="subject" data-total="66">
     <div class="subject-title">Engineering Maths</div>
     <ul>
@@ -249,7 +249,7 @@
       <li><input type="checkbox" data-duration="13.15"> Module 1: 13.15 Hours</li>
       <li><input type="checkbox" data-duration="11.8"> Module 2: 11.8 Hours</li>
       <li><input type="checkbox" data-duration="2.33"> Module 3: 2.33 Hours</li>
-      <li><input type="checkbox" data-duration="19.66"> Module 4: 19.66 Hours</li>
+      <li><input type="checkbox" data-duration="19.60"> Module 4: 19.60 Hours</li>
     </ul>
     <div class="total">Total: 47 Hours</div>
     <div class="remaining">Duration left: 47 Hours</div>
@@ -275,10 +275,13 @@
         const total = parseFloat(subject.dataset.total);
         let remaining = total;
 
-        subject.querySelectorAll("input[type='checkbox']").forEach(cb => {
+        subject.querySelectorAll("input[type='checkbox']").forEach((cb, idx) => {
           if (cb.checked) {
             remaining -= parseFloat(cb.dataset.duration);
           }
+          // Save state to localStorage
+          const key = `${subject.querySelector(".subject-title").textContent}-cb${idx}`;
+          localStorage.setItem(key, cb.checked ? "1" : "0");
         });
 
         subject.querySelector(".remaining").textContent = `Duration left: ${remaining.toFixed(2)} Hours`;
@@ -288,11 +291,26 @@
       document.querySelector("#finalTotalBox .remaining").textContent = `Duration left: ${grandRemaining.toFixed(2)} Hours`;
     }
 
+    // Restore saved state from localStorage
+    function restoreState() {
+      subjects.forEach(subject => {
+        if (subject.id === "finalTotalBox") return;
+
+        subject.querySelectorAll("input[type='checkbox']").forEach((cb, idx) => {
+          const key = `${subject.querySelector(".subject-title").textContent}-cb${idx}`;
+          if (localStorage.getItem(key) === "1") {
+            cb.checked = true;
+          }
+        });
+      });
+    }
+
+    // Add event listeners
     document.querySelectorAll("input[type='checkbox']").forEach(cb => {
       cb.addEventListener("change", updateTotals);
     });
-
-    updateTotals(); // initialize
+    restoreState();
+    updateTotals();
   </script>
 </body>
 </html>
