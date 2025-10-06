@@ -1,134 +1,136 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Playful Current Month Calendar</title>
   <style>
-    body {
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #fdfbfb, #ebedee);
-      margin: 0;
-      padding: 20px;
-      flex-wrap: wrap;
+  body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fdfbfb, #ebedee);
+    margin: 0;
+    padding: 20px;
+    flex-wrap: wrap;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .calendar {
+    display: none; /* hide all months by default */
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    text-align: center;
+    margin: 15px auto;
+    flex: 1 1 300px;
+    position: relative; /* Add relative positioning */
+  }
+
+  .calendar.active {
+    display: block; /* only show current month */
+  }
+
+  .month-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ff6f61;
+  }
+
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 40px);
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .day {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background: #fceabb;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: transform 0.2s;
+    overflow: hidden;
+  }
+
+  .day:hover {
+    transform: scale(1.1);
+  }
+
+  .day.crossed::after, 
+  .day.crossed::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -20%;
+    height: 8px;
+    width: 0;
+    border-radius: 12px;
+    transform: rotate(-20deg);
+    animation: brushStroke 0.6s forwards ease-out;
+  }
+
+  .day.crossed::after {
+    background: linear-gradient(90deg, rgba(255,99,71,0.9), rgba(255,140,0,0.8));
+    box-shadow: 0 0 8px rgba(255,99,71,0.4);
+  }
+
+  .day.crossed::before {
+    background: linear-gradient(90deg, rgba(255,165,0,0.6), rgba(255,69,0,0.6));
+    top: 55%;
+    height: 4px;
+    transform: rotate(-18deg);
+    animation-delay: 0.1s;
+  }
+
+  @keyframes brushStroke {
+    to {
+      width: 150%;
     }
-    .progress-btn-container {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 20px;
-}
+  }
 
-.progress-btn {
-  display: inline-block;
-  padding: 12px 25px;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 25px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
+  /* Progress Button */
+  .progress-btn {
+    display: inline-block;
+    position: absolute; /* Position absolute within the calendar container */
+    bottom: -40px; /* Adjust button to be outside the bottom of the calendar */
+    left: 50%; /* Center button horizontally */
+    transform: translateX(-50%); /* Offset to center the button */
+    padding: 10px 12px;
+    background: #fceabb;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
 
-    .progress-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      }
+  .progress-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+</style>
 
-    .calendar {
-      display: none; /* hide all months by default */
-      background: white;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      text-align: center;
-      margin: 15px;
-      flex: 1 1 300px;
-    }
 
-    .calendar.active {
-      display: block; /* only show current month */
-    }
-
-    .month-title {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      color: #ff6f61;
-    }
-
-    .days {
-      display: grid;
-      grid-template-columns: repeat(7, 40px);
-      gap: 6px;
-      justify-content: center;
-    }
-
-    .day {
-      position: relative;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 10px;
-      background: #fceabb;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 14px;
-      transition: transform 0.2s;
-      overflow: hidden;
-    }
-
-    .day:hover {
-      transform: scale(1.1);
-    }
-
-    .day.crossed::after, 
-    .day.crossed::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: -20%;
-      height: 8px;
-      width: 0;
-      border-radius: 12px;
-      transform: rotate(-20deg);
-      animation: brushStroke 0.6s forwards ease-out;
-    }
-
-    .day.crossed::after {
-      background: linear-gradient(90deg, rgba(255,99,71,0.9), rgba(255,140,0,0.8));
-      box-shadow: 0 0 8px rgba(255,99,71,0.4);
-    }
-
-    .day.crossed::before {
-      background: linear-gradient(90deg, rgba(255,165,0,0.6), rgba(255,69,0,0.6));
-      top: 55%;
-      height: 4px;
-      transform: rotate(-18deg);
-      animation-delay: 0.1s;
-    }
-
-    @keyframes brushStroke {
-      to {
-        width: 150%;
-      }
-    }
-  </style>
 </head>
 <body>
-   <!-- Progress Tracker Button -->
-  <div class="progress-btn-container">
-    <a href="gate_sub.html" class="progress-btn">📊 Progress Tracker</a>
-  </div>
+  <div id="calendarContainer"></div>
 
-  <div id="calendarContainer"></div>
-  <div id="calendarContainer"></div>
+  <!-- Progress Tracker Button -->
+  <a href="gate_sub.html" class="progress-btn">📊 Progress Tracker</a>
 
   <script>
     const container = document.getElementById('calendarContainer');
