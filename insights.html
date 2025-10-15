@@ -1,78 +1,269 @@
-<style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #fdfbfb, #ebedee);
-    margin: 0;
-    padding: 40px;
-    text-align: center;
-  }
-  h1 {
-    color: #ff6f61;
-    font-size: 30px;
-    margin-bottom: 20px;
-  }
-  .subjects-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 30px;
-  }
-  .subject-btn {
-    background: white;
-    color: #ff6f61;
-    border: 2px solid #ff6f61;
-    border-radius: 12px;
-    padding: 12px 18px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  .subject-btn:hover {
-    background: #ff6f61;
-    color: white;
-  }
-  .summary {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin: 20px auto;
-    width: 95%;
-    max-width: 1000px;
-  }
-  .charts-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 50px;
-    width: 95%;
-    margin: 0 auto;
-  }
-  canvas {
-    width: 100%;
-    height: 450px !important; 
-    max-width: 700px;
-    margin: 20px auto;
-  }
-  #treeChart {
-    width: 700px;
-    height: 500px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-  }
-  #backBtn, #resetZoomBtn {
-    background: #ff6f61;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
-  }
-  #backBtn:hover, #resetZoomBtn:hover {
-    background: #ff4b3e;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GATE Subjects Insights</title>
+
+  <!-- Chart.js & Plugins -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
+
+  <!-- Plotly for Treemap -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #ff6f61;
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+    .subjects-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    .subject-btn {
+      background: white;
+      color: #ff6f61;
+      border: 2px solid #ff6f61;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .subject-btn:hover {
+      background: #ff6f61;
+      color: white;
+    }
+    .summary {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 800px;
+    }
+    .charts-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
+    canvas {
+      max-width: 600px;
+      width: 100%;
+      margin: 20px auto;
+    }
+    #treeChart {
+      width: 600px;
+      height: 500px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    #backBtn, #resetZoomBtn {
+      background: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px;
+    }
+    #backBtn:hover, #resetZoomBtn:hover {
+      background: #ff4b3e;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 GATE Insights</h1>
+
+  <!-- Subject Buttons -->
+  <div class="subjects-container">
+    <button class="subject-btn" data-file="data/algorithms.json">Algorithms</button>
+    <button class="subject-btn" data-file="data/dbms.json">DBMS</button>
+    <button class="subject-btn" data-file="data/operating_system.json">Operating System</button>
+    <button class="subject-btn" data-file="data/computer_networks.json">Computer Networks</button>
+    <button class="subject-btn" data-file="data/digital_logic.json">Digital Logic</button>
+    <button class="subject-btn" data-file="data/computer_architecture.json">Computer Architecture</button>
+    <button class="subject-btn" data-file="data/theory_of_computation.json">Theory of Computation</button>
+    <button class="subject-btn" data-file="data/compiler_design.json">Compiler Design</button>
+    <button class="subject-btn" data-file="data/data_structures.json">Data Structures</button>
+    <button class="subject-btn" data-file="data/discrete_maths.json">Discrete Maths</button>
+    <button class="subject-btn" data-file="data/engineering_maths.json">Engineering Maths</button>
+  </div>
+
+  <!-- Chart controls -->
+  <div id="chartControls" style="margin-top:10px;">
+    <button class="subject-btn" id="sortAscBtn">Sort Asc</button>
+    <button class="subject-btn" id="sortDescBtn">Sort Desc</button>
+    <button id="resetZoomBtn">🔍 Reset Zoom</button>
+  </div>
+
+  <h2 id="subjectTitle">Select a subject to view insights</h2>
+  <div class="summary" id="summaryBox">No data loaded yet.</div>
+
+  <div class="charts-container">
+    <div>
+      <h3>📈 Bar Chart</h3>
+      <canvas id="barChart"></canvas>
+    </div>
+    <div>
+      <h3>🌳 Tree Map</h3>
+      <div id="treeChart"></div>
+    </div>
+  </div>
+
+  <button id="backBtn" onclick="window.location.href='index.html'">⬅ Back to Planner</button>
+
+  <script>
+    let barChart = null;
+    let currentData = [];
+    let currentSubject = "";
+
+    // Load JSON data
+    async function loadSubjectData(fileName, subjectDisplayName) {
+      document.getElementById('subjectTitle').textContent = `📘 ${subjectDisplayName}`;
+      document.getElementById('summaryBox').textContent = 'Loading data...';
+
+      try {
+        const res = await fetch(fileName);
+        const data = await res.json();
+        currentData = data;
+        currentSubject = subjectDisplayName;
+
+        renderBarChart(data, subjectDisplayName);
+        renderTreeMap(data, subjectDisplayName);
+        renderSummary(data);
+      } catch (error) {
+        document.getElementById('summaryBox').innerHTML =
+          `<p style="color:red;">Error loading data for "${subjectDisplayName}". Make sure ${fileName} exists.</p>`;
+      }
+    }
+
+    // Summary stats
+    function renderSummary(data) {
+      const totalPYQs = data.reduce((sum, t) => sum + t.pyq, 0);
+      const topTopics = [...data].sort((a, b) => b.pyq - a.pyq).slice(0, 5);
+      const avg = (totalPYQs / data.length).toFixed(2);
+      const max = Math.max(...data.map(t => t.pyq));
+      const min = Math.min(...data.map(t => t.pyq));
+
+      document.getElementById('summaryBox').innerHTML = `
+        <h3>Total PYQs: ${totalPYQs}</h3>
+        <p>Average PYQs per topic: ${avg}</p>
+        <p>Highest: ${max}, Lowest: ${min}</p>
+        <p><strong>Top 5 Topics:</strong></p>
+        <ul style="list-style:none; padding:0;">
+          ${topTopics.map(t => `<li>${t.topic} — ${t.pyq} PYQs</li>`).join('')}
+        </ul>
+      `;
+    }
+
+    // Render Bar Chart (Chart.js)
+    function renderBarChart(data, subjectDisplayName) {
+      if (barChart) barChart.destroy();
+      const ctx = document.getElementById('barChart').getContext('2d');
+
+      barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: data.map(t => t.topic),
+          datasets: [{
+            label: 'PYQ Count',
+            data: data.map(t => t.pyq),
+            backgroundColor: '#ff6f61',
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: {
+              display: true,
+              text: `${subjectDisplayName} — Topic-wise PYQ Distribution`
+            },
+            zoom: {
+              zoom: {
+                wheel: { enabled: true },
+                pinch: { enabled: true },
+                mode: 'xy'
+              },
+              pan: { enabled: true, mode: 'xy' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#555', font: { size: 11 }, autoSkip: false, maxRotation: 90, minRotation: 45 }
+            },
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    // ✅ Render Tree Map (Plotly)
+    function renderTreeMap(data, subjectDisplayName) {
+      const labels = data.map(d => d.topic);
+      const values = data.map(d => d.pyq);
+
+      const trace = {
+        type: "treemap",
+        labels: labels,
+        parents: Array(labels.length).fill(""),
+        values: values,
+        textinfo: "label+value",
+        marker: { colorscale: "Reds" }
+      };
+
+      const layout = {
+        title: `${subjectDisplayName} — Tree Map View`,
+        font: { family: "Poppins", size: 13 },
+        paper_bgcolor: "#ffffff",
+        margin: { t: 50, l: 0, r: 0, b: 0 }
+      };
+
+      Plotly.newPlot("treeChart", [trace], layout, { displayModeBar: false });
+    }
+
+    // Sort buttons (Bar chart only)
+    document.getElementById('sortAscBtn').addEventListener('click', () => {
+      if (!currentData.length) return;
+      const sorted = [...currentData].sort((a, b) => a.pyq - b.pyq);
+      renderBarChart(sorted, `${currentSubject} (Sorted ↑)`);
+    });
+
+    document.getElementById('sortDescBtn').addEventListener('click', () => {
+      if (!currentData.length) return;
+      const sorted = [...currentData].sort((a, b) => b.pyq - a.pyq);
+      renderBarChart(sorted, `${currentSubject} (Sorted ↓)`);
+    });
+
+    // Reset zoom for bar chart
+    document.getElementById('resetZoomBtn').addEventListener('click', () => {
+      if (barChart) barChart.resetZoom();
+    });
+
+    // Subject buttons
+    document.querySelectorAll('.subject-btn[data-file]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fileName = btn.dataset.file;
+        const subjectName = btn.textContent.trim();
+        loadSubjectData(fileName, subjectName);
+      });
+    });
+  </script>
+</body>
+</html>
