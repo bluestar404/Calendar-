@@ -1,0 +1,19 @@
+[
+  {"topic": "Addressing Modes", "pyq": 18},
+  {"topic": "CISC RISC Architecture", "pyq": 2},
+  {"topic": "Cache Memory", "pyq": 71},
+  {"topic": "DMA", "pyq": 9},
+  {"topic": "Data Dependency", "pyq": 2},
+  {"topic": "Data Path", "pyq": 6},
+  {"topic": "IO Handling", "pyq": 7},
+  {"topic": "Instruction Execution", "pyq": 6},
+  {"topic": "Instruction Format", "pyq": 9},
+  {"topic": "Interrupts", "pyq": 8},
+  {"topic": "Machine Instruction", "pyq": 20},
+  {"topic": "Memory Interfacing", "pyq": 6},
+  {"topic": "Microprogramming", "pyq": 13},
+  {"topic": "Pipelining", "pyq": 42},
+  {"topic": "Runtime Environment", "pyq": 2},
+  {"topic": "Speedup", "pyq": 4},
+  {"topic": "Virtual Memory", "pyq": 3}
+]
