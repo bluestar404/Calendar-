@@ -1,0 +1,15 @@
+[
+  {"topic": "AVL Tree", "pyq": 4},
+  {"topic": "Array", "pyq": 13},
+  {"topic": "Binary Heap", "pyq": 29},
+  {"topic": "Binary Search Tree", "pyq": 34},
+  {"topic": "Binary Tree", "pyq": 53},
+  {"topic": "Data Structures", "pyq": 6},
+  {"topic": "Hashing", "pyq": 16},
+  {"topic": "Infix Prefix", "pyq": 5},
+  {"topic": "Linked List", "pyq": 22},
+  {"topic": "Priority Queue", "pyq": 2},
+  {"topic": "Queue", "pyq": 13},
+  {"topic": "Stack", "pyq": 16},
+  {"topic": "Tree", "pyq": 14}
+]
