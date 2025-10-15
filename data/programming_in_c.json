@@ -1,0 +1,20 @@
+[
+  {"topic": "Aliasing", "pyq": 1},
+  {"topic": "Array", "pyq": 13},
+  {"topic": "Functions", "pyq": 1},
+  {"topic": "Goto", "pyq": 2},
+  {"topic": "Identify Function", "pyq": 6},
+  {"topic": "Loop Invariants", "pyq": 8},
+  {"topic": "Output", "pyq": 5},
+  {"topic": "Parameter Passing", "pyq": 12},
+  {"topic": "Pointers", "pyq": 11},
+  {"topic": "Programming Constructs", "pyq": 1},
+  {"topic": "Programming In C", "pyq": 31},
+  {"topic": "Programming Paradigms", "pyq": 2},
+  {"topic": "Recursion", "pyq": 17},
+  {"topic": "Structure", "pyq": 5},
+  {"topic": "Switch Case", "pyq": 2},
+  {"topic": "Type Checking", "pyq": 1},
+  {"topic": "Union", "pyq": 1},
+  {"topic": "Variable Binding", "pyq": 1}
+]
