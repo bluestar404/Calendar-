@@ -1,0 +1,22 @@
+[
+  {"topic": "Assembler", "pyq": 9},
+  {"topic": "Code Optimization", "pyq": 9},
+  {"topic": "Compilation Phases", "pyq": 12},
+  {"topic": "Expression Evaluation", "pyq": 2},
+  {"topic": "First and Follow", "pyq": 5},
+  {"topic": "Grammar", "pyq": 50},
+  {"topic": "Intermediate Code", "pyq": 11},
+  {"topic": "LR Parser", "pyq": 19},
+  {"topic": "Lexical Analysis", "pyq": 6},
+  {"topic": "Linker", "pyq": 3},
+  {"topic": "Live Variable Analysis", "pyq": 3},
+  {"topic": "Macros", "pyq": 4},
+  {"topic": "Operator Precedence", "pyq": 3},
+  {"topic": "Parameter Passing", "pyq": 14},
+  {"topic": "Parsing", "pyq": 27},
+  {"topic": "Register Allocation", "pyq": 6},
+  {"topic": "Runtime Environment", "pyq": 22},
+  {"topic": "Static Single Assignment", "pyq": 3},
+  {"topic": "Syntax Directed Translation", "pyq": 16},
+  {"topic": "Variable Scope", "pyq": 2}
+]
