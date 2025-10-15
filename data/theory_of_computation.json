@@ -1,0 +1,17 @@
+[
+  {"topic": "Closure Property", "pyq": 8},
+  {"topic": "Context Free Language", "pyq": 32},
+  {"topic": "Countable Uncountable Set", "pyq": 3},
+  {"topic": "Decidability", "pyq": 29},
+  {"topic": "Finite Automata", "pyq": 41},
+  {"topic": "Identify Class Language", "pyq": 31},
+  {"topic": "Minimal State Automata", "pyq": 25},
+  {"topic": "Non Determinism", "pyq": 6},
+  {"topic": "Pumping Lemma", "pyq": 2},
+  {"topic": "Pushdown Automata", "pyq": 15},
+  {"topic": "Recursive and Recursively Enumerable Languages", "pyq": 16},
+  {"topic": "Reduction", "pyq": 2},
+  {"topic": "Regular Expression", "pyq": 29},
+  {"topic": "Regular Grammar", "pyq": 3},
+  {"topic": "Regular Language", "pyq": 33}
+]
