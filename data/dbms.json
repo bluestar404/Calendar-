@@ -1,0 +1,18 @@
+[
+  {"topic": "B Tree", "pyq": 29},
+  {"topic": "Candidate Key", "pyq": 5},
+  {"topic": "Conflict Serializable", "pyq": 8},
+  {"topic": "Database Design", "pyq": 1},
+  {"topic": "Database Normalization", "pyq": 55},
+  {"topic": "ER Diagram", "pyq": 12},
+  {"topic": "Indexing", "pyq": 13},
+  {"topic": "Joins", "pyq": 7},
+  {"topic": "Multivalued Dependency 4NF", "pyq": 1},
+  {"topic": "Natural Join", "pyq": 3},
+  {"topic": "Referential Integrity", "pyq": 4},
+  {"topic": "Relational Algebra", "pyq": 30},
+  {"topic": "Relational Calculus", "pyq": 15},
+  {"topic": "Relational Model", "pyq": 1},
+  {"topic": "SQL", "pyq": 56},
+  {"topic": "Transaction and Concurrency", "pyq": 28}
+]
