@@ -1,0 +1,23 @@
+[
+  {"topic": "Context Switch", "pyq": 4},
+  {"topic": "Deadlock Prevention Avoidance Detection", "pyq": 4},
+  {"topic": "Disk", "pyq": 31},
+  {"topic": "Disk Scheduling", "pyq": 14},
+  {"topic": "File System", "pyq": 9},
+  {"topic": "Fork System Call", "pyq": 7},
+  {"topic": "IO Handling", "pyq": 6},
+  {"topic": "Inter Process Communication", "pyq": 1},
+  {"topic": "Interrupts", "pyq": 7},
+  {"topic": "Memory Management", "pyq": 10},
+  {"topic": "OS Protection", "pyq": 3},
+  {"topic": "Page Replacement", "pyq": 32},
+  {"topic": "Precedence Graph", "pyq": 3},
+  {"topic": "Process", "pyq": 5},
+  {"topic": "Process Scheduling", "pyq": 47},
+  {"topic": "Process Synchronization", "pyq": 52},
+  {"topic": "Resource Allocation", "pyq": 27},
+  {"topic": "Semaphore", "pyq": 10},
+  {"topic": "System Call", "pyq": 1},
+  {"topic": "Threads", "pyq": 10},
+  {"topic": "Virtual Memory", "pyq": 43}
+]
