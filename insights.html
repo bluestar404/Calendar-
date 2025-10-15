@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GATE Subjects Insights</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #ff6f61;
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+    .subjects-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    .subject-btn {
+      background: white;
+      color: #ff6f61;
+      border: 2px solid #ff6f61;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .subject-btn:hover {
+      background: #ff6f61;
+      color: white;
+    }
+    .summary {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 800px;
+    }
+    canvas {
+      max-width: 1000px;
+      margin: 40px auto;
+    }
+    #backBtn {
+      background: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #backBtn:hover {
+      background: #ff4b3e;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 GATE Insights</h1>
+
+  <div class="subjects-container">
+    <button class="subject-btn" data-file="algorithms.json">Algorithms</button>
+    <button class="subject-btn" data-file="dbms.json">DBMS</button>
+    <button class="subject-btn" data-file="operating_system.json">Operating System</button>
+    <button class="subject-btn" data-file="computer_networks.json">Computer Networks</button>
+    <button class="subject-btn" data-file="digital_logic.json">Digital Logic</button>
+    <button class="subject-btn" data-file="computer_architecture.json">Computer Architecture</button>
+    <button class="subject-btn" data-file="theory_of_computation.json">Theory of Computation</button>
+    <button class="subject-btn" data-file="compiler_design.json">Compiler Design</button>
+    <button class="subject-btn" data-file="data_structures.json">Data Structures</button>
+    <button class="subject-btn" data-file="discrete_maths.json">Discrete Maths</button>
+    <button class="subject-btn" data-file="engineering_maths.json">Engineering Maths</button>
+  </div>
+
+  <h2 id="subjectTitle">Select a subject to view insights</h2>
+  <div class="summary" id="summaryBox">No data loaded yet.</div>
+  <canvas id="pyqChart"></canvas>
+
+  <button id="backBtn" onclick="window.location.href='index.html'">⬅ Back to Planner</button>
+
+  <script>
+    let chartInstance = null;
+
+    async function loadSubjectData(fileName, subjectDisplayName) {
+      document.getElementById('subjectTitle').textContent = `📘 ${subjectDisplayName}`;
+      document.getElementById('summaryBox').textContent = 'Loading data...';
+
+      try {
+        const res = await fetch(fileName);
+        const data = await res.json();
+
+        const totalPYQs = data.reduce((sum, t) => sum + t.pyq, 0);
+        const topTopics = [...data].sort((a, b) => b.pyq - a.pyq).slice(0, 5);
+
+        document.getElementById('summaryBox').innerHTML = `
+          <h3>Total PYQs: ${totalPYQs}</h3>
+          <p><strong>Top 5 Topics:</strong></p>
+          <ul style="list-style:none; padding:0;">
+            ${topTopics.map(t => `<li>${t.topic} — ${t.pyq} PYQs</li>`).join('')}
+          </ul>
+        `;
+
+        // Destroy old chart if exists
+        if (chartInstance) chartInstance.destroy();
+
+        const ctx = document.getElementById('pyqChart').getContext('2d');
+        chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: data.map(t => t.topic),
+            datasets: [{
+              label: 'PYQ Count',
+              data: data.map(t => t.pyq),
+              borderWidth: 1,
+              backgroundColor: '#ff6f61',
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              title: {
+                display: true,
+                text: `${subjectDisplayName} — Topic-wise PYQ Distribution`,
+                color: '#333',
+                font: { size: 18 }
+              }
+            },
+            scales: {
+              x: {
+                ticks: { color: '#555', font: { size: 11 }, autoSkip: false, maxRotation: 90, minRotation: 45 }
+              },
+              y: {
+                beginAtZero: true,
+                ticks: { stepSize: 5 }
+              }
+            }
+          }
+        });
+      } catch (error) {
+        document.getElementById('summaryBox').innerHTML = `<p style="color:red;">Error loading data for "${subjectDisplayName}". Make sure ${fileName} exists.</p>`;
+      }
+    }
+
+    // Add event listeners to buttons
+    document.querySelectorAll('.subject-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fileName = btn.dataset.file;
+        const subjectName = btn.textContent.trim();
+        loadSubjectData(fileName, subjectName);
+      });
+    });
+  </script>
+</body>
+</html>
