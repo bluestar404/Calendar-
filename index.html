@@ -2,220 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>GATE Tools</title>
+  <title>GATE Planner & Insights</title>
+
   <style>
-  body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    display: flex;
-    justify-content: center; /* Horizontally center content */
-    align-items: center; /* Vertically center content */
-    min-height: 100vh; /* Take up the full height of the viewport */
-    background: linear-gradient(135deg, #fdfbfb, #ebedee);
-    margin: 0;
-    padding: 0; /* Removed extra padding */
-  }
-
-  .calendar {
-    display: none; /* Hide all months by default */
-    background: white;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    text-align: center;
-    flex: 1 1 300px;
-    position: relative; /* Add relative positioning */
-  }
-
-  .calendar.active {
-    display: block; /* Only show current month */
-  }
-
-  .month-title {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #ff6f61;
-  }
-
-  .days {
-    display: grid;
-    grid-template-columns: repeat(7, 40px);
-    gap: 6px;
-    justify-content: center;
-  }
-
-  .day {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    background: #fceabb;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 14px;
-    transition: transform 0.2s;
-    overflow: hidden;
-  }
-
-  .day:hover {
-    transform: scale(1.1);
-  }
-
-  .day.crossed::after, 
-  .day.crossed::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: -20%;
-    height: 8px;
-    width: 0;
-    border-radius: 12px;
-    transform: rotate(-20deg);
-    animation: brushStroke 0.6s forwards ease-out;
-  }
-
-  .day.crossed::after {
-    background: linear-gradient(90deg, rgba(255,99,71,0.9), rgba(255,140,0,0.8));
-    box-shadow: 0 0 8px rgba(255,99,71,0.4);
-  }
-
-  .day.crossed::before {
-    background: linear-gradient(90deg, rgba(255,165,0,0.6), rgba(255,69,0,0.6));
-    top: 55%;
-    height: 4px;
-    transform: rotate(-18deg);
-    animation-delay: 0.1s;
-  }
-
-  @keyframes brushStroke {
-    to {
-      width: 150%;
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      overflow-x: hidden;
     }
-  }
 
-  /* Progress Button */
-  .progress-btn {
-    display: inline-block;
-    position: absolute; /* Position absolute within the calendar container */
-    bottom: 50px; /* Adjust button to be outside the bottom of the calendar */
-    left: 50%; /* Center button horizontally */
-    transform: translateX(-50%); /* Offset to center the button */
-    padding: 10px 12px;
-    background: #fceabb;
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 20px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
+    h1 {
+      font-size: 40px;
+      color: #ff6f61;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      animation: fadeInDown 0.8s ease-out;
+    }
 
-  .progress-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  }
+    p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 40px;
+      animation: fadeInUp 1s ease-out;
+    }
 
-  /* Test Button */
-  .test-btn {
-    display: inline-block;
-    position: absolute; /* Position absolute within the calendar container */
-    bottom: 120px; /* Adjust button to be a little higher */
-    left: 50%; /* Center button horizontally */
-    transform: translateX(-50%); /* Offset to center the button */
-    padding: 10px 15px;
-    background: #4caf50;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 20px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+      animation: fadeIn 1s ease-in;
+    }
 
-  .test-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  }
+    .main-btn {
+      background: white;
+      color: #ff6f61;
+      border: 2px solid #ff6f61;
+      border-radius: 15px;
+      padding: 18px 40px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transform: translateY(0);
+    }
+
+    .main-btn:hover {
+      background: #ff6f61;
+      color: white;
+      box-shadow: 0 8px 20px rgba(255,111,97,0.3);
+      transform: translateY(-5px);
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 14px;
+      color: #888;
+      animation: fadeIn 1.5s ease-in;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 32px; }
+      .main-btn { width: 80%; font-size: 16px; }
+    }
   </style>
 </head>
+
 <body>
-  <div id="calendarContainer"></div>
+  <h1>🎯 GATE Planner</h1>
+  <p>Plan, analyze, and visualize your GATE preparation effortlessly</p>
 
-  <!-- Progress Tracker Button -->
-  <a href="gate_sub.html" class="progress-btn">📊 Progress Tracker</a>
+  <div class="button-container">
+    <button class="main-btn" onclick="window.location.href='planner.html'">📘 Study Planner</button>
+    <button class="main-btn" onclick="window.location.href='insights.html'">📊 Subject Insights</button>
+    <button class="main-btn" onclick="window.location.href='calendar.html'">📅 Calendar</button>
+  </div>
 
-  <!-- Test Button -->
-  <a href="insights.html" class="test-btn">Test</a>
-
-  <script>
-    const container = document.getElementById('calendarContainer');
-    const year = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
-
-    const monthNames = Array.from({length: 12}, (_, i) => 
-      new Date(year, i).toLocaleString('default', { month: 'long' })
-    );
-
-    monthNames.forEach((monthName, monthIndex) => {
-      const cal = document.createElement('div');
-      cal.classList.add('calendar');
-      if (monthIndex === currentMonth) {
-        cal.classList.add('active'); // show only current month
-      }
-
-      const title = document.createElement('div');
-      title.classList.add('month-title');
-      title.textContent = `${monthName} ${year}`;
-      cal.appendChild(title);
-
-      const daysGrid = document.createElement('div');
-      daysGrid.classList.add('days');
-
-      const firstDay = new Date(year, monthIndex, 1).getDay();
-      const totalDays = new Date(year, monthIndex + 1, 0).getDate();
-      const storageKey = `crossedDays-${year}-${monthIndex}`;
-      const savedCrossed = JSON.parse(localStorage.getItem(storageKey)) || [];
-
-      // Empty spots before first day
-      for (let i = 0; i < firstDay; i++) {
-        const empty = document.createElement('div');
-        empty.classList.add('day');
-        empty.style.visibility = "hidden";
-        daysGrid.appendChild(empty);
-      }
-
-      // Days
-      for (let d = 1; d <= totalDays; d++) {
-        const dayEl = document.createElement('div');
-        dayEl.classList.add('day');
-        dayEl.textContent = d;
-
-        if (savedCrossed.includes(d)) {
-          dayEl.classList.add('crossed');
-        }
-
-        dayEl.addEventListener('click', () => {
-          dayEl.classList.toggle('crossed');
-
-          let crossed = JSON.parse(localStorage.getItem(storageKey)) || [];
-          if (dayEl.classList.contains('crossed')) {
-            crossed.push(d);
-          } else {
-            crossed = crossed.filter(num => num !== d);
-          }
-          localStorage.setItem(storageKey, JSON.stringify(crossed));
-        });
-
-        daysGrid.appendChild(dayEl);
-      }
-
-      cal.appendChild(daysGrid);
-      container.appendChild(cal);
-    });
-  </script>
+  <div class="footer">© 2025 GATE Prep Visualizer</div>
 </body>
 </html>
