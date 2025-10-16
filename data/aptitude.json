@@ -1,0 +1,29 @@
+[
+  { "topic": "Analytical Aptitude", "pyq": 135 },
+  { "topic": "Logical Reasoning", "pyq": 40 },
+  { "topic": "Direction Sense", "pyq": 11 },
+  { "topic": "Sequence Series", "pyq": 12 },
+  { "topic": "Statements Follow", "pyq": 33 },
+
+  { "topic": "Quantitative Aptitude", "pyq": 478 },
+  { "topic": "Arithmetic Series", "pyq": 9 },
+  { "topic": "Geometry", "pyq": 26 },
+  { "topic": "Percentage", "pyq": 21 },
+  { "topic": "Probability", "pyq": 28 },
+  { "topic": "Ratio Proportion", "pyq": 26 },
+  { "topic": "Speed Time Distance", "pyq": 19 },
+  { "topic": "Work Time", "pyq": 17 },
+
+  { "topic": "Spatial Aptitude", "pyq": 47 },
+  { "topic": "Mirror Image", "pyq": 7 },
+  { "topic": "Paper Folding", "pyq": 10 },
+  { "topic": "Patterns In 3D", "pyq": 8 },
+  { "topic": "Patterns In 2D", "pyq": 9 },
+
+  { "topic": "Verbal Aptitude", "pyq": 368 },
+  { "topic": "Most Appropriate Word", "pyq": 110 },
+  { "topic": "Passage Reading", "pyq": 56 },
+  { "topic": "Tenses", "pyq": 24 },
+  { "topic": "Verbal Reasoning", "pyq": 40 },
+  { "topic": "Word Pairs", "pyq": 29 }
+]
