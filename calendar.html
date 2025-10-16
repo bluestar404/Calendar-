@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📅 GATE Calendar</title>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+      color: #333;
+    }
+
+    h1 {
+      color: #ff6f61;
+      margin-bottom: 10px;
+    }
+
+    .calendar-container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      width: 90%;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 30px;
+      transition: transform 0.3s;
+    }
+
+    .calendar-container:hover {
+      transform: translateY(-3px);
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .calendar-header h2 {
+      margin: 0;
+      color: #ff6f61;
+      font-weight: 600;
+    }
+
+    .nav-btn {
+      background: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: #ff4b3e;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .day-name {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .day {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px 0;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.25s;
+      position: relative;
+    }
+
+    .day:hover {
+      background: #ff6f61;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(255,111,97,0.3);
+    }
+
+    .today {
+      border: 2px solid #ff6f61;
+      font-weight: 600;
+    }
+
+    .past-day {
+      color: #bbb;
+      background: #fdf2f2;
+      cursor: not-allowed;
+    }
+
+    /* 🌸 THEMED CROSS MARK FOR PAST DATES */
+    .past-day::after {
+      content: "✕";
+      position: absolute;
+      right: 8px;
+      top: 6px;
+      color: #ff6f61;
+      font-size: 16px;
+      opacity: 0.75;
+      font-weight: bold;
+    }
+
+    #backBtn {
+      background: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 30px;
+      transition: 0.3s;
+    }
+
+    #backBtn:hover {
+      background: #ff4b3e;
+    }
+
+    @media (max-width: 600px) {
+      .calendar-container { padding: 20px; }
+      .calendar-header h2 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📅 GATE Study Calendar</h1>
+  <p>Track your daily progress — past dates are marked with ✕</p>
+
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <button class="nav-btn" id="prevMonth">← Prev</button>
+      <h2 id="monthYear"></h2>
+      <button class="nav-btn" id="nextMonth">Next →</button>
+    </div>
+
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+
+  <button id="backBtn" onclick="window.location.href='index.html'">⬅ Back to Home</button>
+
+  <script>
+    const monthYear = document.getElementById("monthYear");
+    const calendarGrid = document.getElementById("calendarGrid");
+
+    const now = new Date();
+    let currentMonth = now.getMonth();
+    let currentYear = now.getFullYear();
+
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    function renderCalendar(month, year) {
+      calendarGrid.innerHTML = "";
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const lastDate = new Date(year, month + 1, 0).getDate();
+
+      monthYear.textContent = `${months[month]} ${year}`;
+
+      const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      dayNames.forEach(d => {
+        const div = document.createElement("div");
+        div.classList.add("day-name");
+        div.textContent = d;
+        calendarGrid.appendChild(div);
+      });
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        calendarGrid.appendChild(empty);
+      }
+
+      for (let day = 1; day <= lastDate; day++) {
+        const div = document.createElement("div");
+        div.classList.add("day");
+        div.textContent = day;
+
+        const thisDate = new Date(year, month, day);
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        if (thisDate < today) {
+          div.classList.add("past-day");
+        } else if (thisDate.getTime() === today.getTime()) {
+          div.classList.add("today");
+        }
+
+        calendarGrid.appendChild(div);
+      }
+    }
+
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar(currentMonth, currentYear);
+    });
+
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar(currentMonth, currentYear);
+    });
+
+    renderCalendar(currentMonth, currentYear);
+  </script>
+</body>
+</html>
