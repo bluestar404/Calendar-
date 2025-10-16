@@ -4,12 +4,10 @@
   <meta charset="UTF-8">
   <title>GATE Subjects Insights</title>
 
-  <!-- Chart.js & Plugins -->
+  <!-- Core Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1"></script>
-
-  <!-- Plotly for Treemap -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
   <style>
     body {
@@ -60,19 +58,16 @@
       justify-content: center;
       gap: 40px;
     }
-    canvas {
-      max-width: 600px;
-      width: 100%;
-      margin: 20px auto;
-    }
-    #treeChart {
-      width: 600px;
-      height: 500px;
+    .chart-box {
       background: white;
       border-radius: 12px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      padding: 20px;
     }
-    #backBtn, #resetZoomBtn {
+    .chart-box h3 {
+      color: #ff6f61;
+    }
+    #backBtn {
       background: #ff6f61;
       color: white;
       border: none;
@@ -82,7 +77,7 @@
       font-size: 16px;
       margin: 10px;
     }
-    #backBtn:hover, #resetZoomBtn:hover {
+    #backBtn:hover {
       background: #ff4b3e;
     }
   </style>
@@ -90,7 +85,6 @@
 <body>
   <h1>📊 GATE Insights</h1>
 
-  <!-- Subject Buttons -->
   <div class="subjects-container">
     <button class="subject-btn" data-file="data/algorithms.json">Algorithms</button>
     <button class="subject-btn" data-file="data/dbms.json">DBMS</button>
@@ -104,38 +98,36 @@
     <button class="subject-btn" data-file="data/discrete_maths.json">Discrete Maths</button>
     <button class="subject-btn" data-file="data/engineering_maths.json">Engineering Maths</button>
     <button class="subject-btn" data-file="data/aptitude.json">Aptitude</button>
-
-  </div>
-
-  <!-- Chart controls -->
-  <div id="chartControls" style="margin-top:10px;">
-    <button class="subject-btn" id="sortAscBtn">Sort Asc</button>
-    <button class="subject-btn" id="sortDescBtn">Sort Desc</button>
-    <button id="resetZoomBtn">🔍 Reset Zoom</button>
   </div>
 
   <h2 id="subjectTitle">Select a subject to view insights</h2>
   <div class="summary" id="summaryBox">No data loaded yet.</div>
 
   <div class="charts-container">
-    <div>
-      <h3>📈 Bar Chart</h3>
-      <canvas id="barChart"></canvas>
+
+    <div class="chart-box">
+      <h3>🍩 Donut Chart</h3>
+      <div id="donutChart" style="width:600px; height:500px; margin:auto;"></div>
     </div>
-    <div>
+
+    <div class="chart-box">
       <h3>🌳 Tree Map</h3>
-      <div id="treeChart"></div>
+      <div id="treeChart" style="width:600px; height:500px; margin:auto;"></div>
     </div>
+
+    <!-- ADD NEW CHART CONTAINERS HERE -->
   </div>
 
   <button id="backBtn" onclick="window.location.href='index.html'">⬅ Back to Planner</button>
 
+  <!-- ADD NEW VISUALIZATION SCRIPT FILES HERE -->
+  <script src="visualization/donut.js"></script>
+  <script src="visualization/treemap.js"></script>
+
   <script>
-    let barChart = null;
     let currentData = [];
     let currentSubject = "";
 
-    // Load JSON data
     async function loadSubjectData(fileName, subjectDisplayName) {
       document.getElementById('subjectTitle').textContent = `📘 ${subjectDisplayName}`;
       document.getElementById('summaryBox').textContent = 'Loading data...';
@@ -146,16 +138,17 @@
         currentData = data;
         currentSubject = subjectDisplayName;
 
-        renderBarChart(data, subjectDisplayName);
-        renderTreeMap(data, subjectDisplayName);
         renderSummary(data);
+        renderDonutChart(data, subjectDisplayName);
+        renderTreeMap(data, subjectDisplayName);
+
+        // ADD NEW VISUALIZATION FUNCTION CALLS HERE
       } catch (error) {
         document.getElementById('summaryBox').innerHTML =
           `<p style="color:red;">Error loading data for "${subjectDisplayName}". Make sure ${fileName} exists.</p>`;
       }
     }
 
-    // Summary stats
     function renderSummary(data) {
       const totalPYQs = data.reduce((sum, t) => sum + t.pyq, 0);
       const topTopics = [...data].sort((a, b) => b.pyq - a.pyq).slice(0, 5);
@@ -174,91 +167,6 @@
       `;
     }
 
-    // Render Bar Chart (Chart.js)
-    function renderBarChart(data, subjectDisplayName) {
-      if (barChart) barChart.destroy();
-      const ctx = document.getElementById('barChart').getContext('2d');
-
-      barChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: data.map(t => t.topic),
-          datasets: [{
-            label: 'PYQ Count',
-            data: data.map(t => t.pyq),
-            backgroundColor: '#ff6f61',
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: false },
-            title: {
-              display: true,
-              text: `${subjectDisplayName} — Topic-wise PYQ Distribution`
-            },
-            zoom: {
-              zoom: {
-                wheel: { enabled: true },
-                pinch: { enabled: true },
-                mode: 'xy'
-              },
-              pan: { enabled: true, mode: 'xy' }
-            }
-          },
-          scales: {
-            x: {
-              ticks: { color: '#555', font: { size: 11 }, autoSkip: false, maxRotation: 90, minRotation: 45 }
-            },
-            y: { beginAtZero: true }
-          }
-        }
-      });
-    }
-
-    // ✅ Render Tree Map (Plotly)
-    function renderTreeMap(data, subjectDisplayName) {
-      const labels = data.map(d => d.topic);
-      const values = data.map(d => d.pyq);
-
-      const trace = {
-        type: "treemap",
-        labels: labels,
-        parents: Array(labels.length).fill(""),
-        values: values,
-        textinfo: "label+value",
-        marker: { colorscale: "Reds" }
-      };
-
-      const layout = {
-        title: `${subjectDisplayName} — Tree Map View`,
-        font: { family: "Poppins", size: 13 },
-        paper_bgcolor: "#ffffff",
-        margin: { t: 50, l: 0, r: 0, b: 0 }
-      };
-
-      Plotly.newPlot("treeChart", [trace], layout, { displayModeBar: false });
-    }
-
-    // Sort buttons (Bar chart only)
-    document.getElementById('sortAscBtn').addEventListener('click', () => {
-      if (!currentData.length) return;
-      const sorted = [...currentData].sort((a, b) => a.pyq - b.pyq);
-      renderBarChart(sorted, `${currentSubject} (Sorted ↑)`);
-    });
-
-    document.getElementById('sortDescBtn').addEventListener('click', () => {
-      if (!currentData.length) return;
-      const sorted = [...currentData].sort((a, b) => b.pyq - a.pyq);
-      renderBarChart(sorted, `${currentSubject} (Sorted ↓)`);
-    });
-
-    // Reset zoom for bar chart
-    document.getElementById('resetZoomBtn').addEventListener('click', () => {
-      if (barChart) barChart.resetZoom();
-    });
-
-    // Subject buttons
     document.querySelectorAll('.subject-btn[data-file]').forEach(btn => {
       btn.addEventListener('click', () => {
         const fileName = btn.dataset.file;
