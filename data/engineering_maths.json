@@ -1,0 +1,31 @@
+[
+  { "topic": "Calculus", "pyq": 52 },
+  { "topic": "Continuity", "pyq": 8 },
+  { "topic": "Definite Integral", "pyq": 2 },
+  { "topic": "Differentiation", "pyq": 6 },
+  { "topic": "Integration", "pyq": 11 },
+  { "topic": "Limits", "pyq": 13 },
+  { "topic": "Maxima Minima", "pyq": 10 },
+  { "topic": "Polynomials", "pyq": 2 },
+
+  { "topic": "Linear Algebra", "pyq": 85 },
+  { "topic": "Determinant", "pyq": 10 },
+  { "topic": "Eigen Value", "pyq": 31 },
+  { "topic": "Matrix", "pyq": 19 },
+  { "topic": "Rank of Matrix", "pyq": 6 },
+  { "topic": "System of Equations", "pyq": 14 },
+  { "topic": "Vector Space", "pyq": 4 },
+
+  { "topic": "Probability", "pyq": 88 },
+  { "topic": "Binomial Distribution", "pyq": 6 },
+  { "topic": "Conditional Probability", "pyq": 14 },
+  { "topic": "Expectation", "pyq": 10 },
+  { "topic": "Exponential Distribution", "pyq": 3 },
+  { "topic": "Independent Events", "pyq": 5 },
+  { "topic": "Normal Distribution", "pyq": 2 },
+  { "topic": "Poisson Distribution", "pyq": 4 },
+  { "topic": "Probability Density Function", "pyq": 1 },
+  { "topic": "Random Variable", "pyq": 5 },
+  { "topic": "Statistics", "pyq": 2 },
+  { "topic": "Uniform Distribution", "pyq": 9 }
+]
