@@ -1,0 +1,34 @@
+[
+  { "topic": "Combinatory", "pyq": 49 },
+  { "topic": "Balls In Bins", "pyq": 4 },
+  { "topic": "Counting", "pyq": 4 },
+  { "topic": "Generating Functions", "pyq": 6 },
+  { "topic": "Modular Arithmetic", "pyq": 2 },
+  { "topic": "Pigeonhole Principle", "pyq": 2 },
+  { "topic": "Recurrence Relation", "pyq": 7 },
+  { "topic": "Summation", "pyq": 3 },
+  
+  { "topic": "Graph Theory", "pyq": 81 },
+  { "topic": "Degree of Graph", "pyq": 12 },
+  { "topic": "Graph Coloring", "pyq": 11 },
+  { "topic": "Graph Connectivity", "pyq": 40 },
+  { "topic": "Graph Isomorphism", "pyq": 1 },
+  { "topic": "Graph Matching", "pyq": 1 },
+  { "topic": "Graph Planarity", "pyq": 13 },
+
+  { "topic": "Mathematical Logic", "pyq": 75 },
+  { "topic": "First Order Logic", "pyq": 32 },
+  { "topic": "Logical Reasoning", "pyq": 3 },
+  { "topic": "Propositional Logic", "pyq": 40 },
+
+  { "topic": "Set Theory & Algebra", "pyq": 168 },
+  { "topic": "Binary Operation", "pyq": 8 },
+  { "topic": "Functions", "pyq": 29 },
+  { "topic": "Group Theory", "pyq": 33 },
+  { "topic": "Lattice", "pyq": 9 },
+  { "topic": "Mathematical Induction", "pyq": 2 },
+  { "topic": "Number Theory", "pyq": 7 },
+  { "topic": "Partial Order", "pyq": 11 },
+  { "topic": "Relations", "pyq": 36 },
+  { "topic": "Set Theory", "pyq": 27 }
+]
