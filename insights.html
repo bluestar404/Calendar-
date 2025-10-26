@@ -5,10 +5,7 @@
   <title>GATE Subjects Insights</title>
 
   <!-- Core Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
   <style>
     body {
@@ -51,22 +48,22 @@
       padding: 20px;
       margin: 20px auto;
       width: 90%;
-      max-width: 800px;
+      max-width: 900px;
+      text-align: left;
     }
-    .charts-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 40px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
     }
-    .chart-box {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-      padding: 20px;
+    th, td {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      text-align: center;
     }
-    .chart-box h3 {
-      color: #ff6f61;
+    th {
+      background: #ff6f61;
+      color: white;
     }
     #backBtn {
       background: #ff6f61;
@@ -107,24 +104,7 @@
   <h2 id="subjectTitle">Select a subject to view insights</h2>
   <div class="summary" id="summaryBox">No data loaded yet.</div>
 
-  <div class="charts-container">
-
-    <div class="chart-box">
-      <h3>🍩 Donut Chart</h3>
-      <div id="donutChart" style="width:600px; height:500px; margin:auto;"></div>
-    </div>
-
-    <div class="chart-box">
-      <h3>🌳 Tree Map</h3>
-      <div id="treeChart" style="width:600px; height:500px; margin:auto;"></div>
-    </div>
-
-  </div>
-
   <button id="backBtn" onclick="window.location.href='index.html'">⬅ Back to Planner</button>
-
-  <script src="visualization/donut.js"></script>
-  <script src="visualization/treemap.js"></script>
 
   <script>
     let currentData = [];
@@ -140,9 +120,7 @@
         currentData = data;
         currentSubject = subjectDisplayName;
 
-        renderSummary(data);
-        renderDonutChart(data, subjectDisplayName);
-        renderTreeMap(data, subjectDisplayName);
+        renderSummary(data, subjectDisplayName);
 
       } catch (error) {
         document.getElementById('summaryBox').innerHTML =
@@ -150,7 +128,7 @@
       }
     }
 
-    function renderSummary(data) {
+    function renderSummary(data, subjectName) {
       const totalPYQs = data.reduce((sum, t) => sum + t.pyq, 0);
       const topTopics = [...data].sort((a, b) => b.pyq - a.pyq).slice(0, 5);
       const avg = (totalPYQs / data.length).toFixed(2);
@@ -158,10 +136,11 @@
       const min = Math.min(...data.map(t => t.pyq));
 
       document.getElementById('summaryBox').innerHTML = `
-        <h3>Total PYQs: ${totalPYQs}</h3>
+        <h3>${subjectName}</h3>
+        <p><strong>Total PYQs:</strong> ${totalPYQs}</p>
         <p>Average PYQs per topic: ${avg}</p>
         <p>Highest: ${max}, Lowest: ${min}</p>
-        <p><strong>Top 5 Topics:</strong></p>
+        <h4>Top 5 Topics:</h4>
         <ul style="list-style:none; padding:0;">
           ${topTopics.map(t => `<li>${t.topic} — ${t.pyq} PYQs</li>`).join('')}
         </ul>
@@ -177,102 +156,100 @@
       });
     });
 
-   // ✅ SMART OVERALL STATS FEATURE
-document.getElementById('overallBtn').addEventListener('click', async () => {
-  document.getElementById('subjectTitle').textContent = "📊 Overall Stats (Balanced Importance)";
-  document.getElementById('summaryBox').textContent = 'Analyzing all subjects...';
+    // ✅ SMART OVERALL STATS FEATURE (with outlier handling)
+    document.getElementById('overallBtn').addEventListener('click', async () => {
+      document.getElementById('subjectTitle').textContent = "📊 Overall Stats (Balanced Importance)";
+      document.getElementById('summaryBox').textContent = 'Analyzing all subjects...';
 
-  const subjectButtons = document.querySelectorAll('.subject-btn[data-file]');
-  let summaryData = [];
+      const subjectButtons = document.querySelectorAll('.subject-btn[data-file]');
+      let summaryData = [];
 
-  for (let btn of subjectButtons) {
-    try {
-      const res = await fetch(btn.dataset.file);
-      const data = await res.json();
-      const totalPYQ = data.reduce((sum, t) => sum + t.pyq, 0);
-      const topicCount = data.length;
-      const pyqPerTopic = totalPYQ / topicCount;
-      summaryData.push({
-        subject: btn.textContent.trim(),
-        totalPYQ,
-        topicCount,
-        pyqPerTopic
+      for (let btn of subjectButtons) {
+        try {
+          const res = await fetch(btn.dataset.file);
+          const data = await res.json();
+          const totalPYQ = data.reduce((sum, t) => sum + t.pyq, 0);
+
+          // ✅ Ignore outliers
+          if (totalPYQ > 400) {
+            console.warn(`Ignoring ${btn.textContent.trim()} (outlier: ${totalPYQ} PYQs)`);
+            continue;
+          }
+
+          const topicCount = data.length;
+          const pyqPerTopic = totalPYQ / topicCount;
+          summaryData.push({
+            subject: btn.textContent.trim(),
+            totalPYQ,
+            topicCount,
+            pyqPerTopic
+          });
+        } catch (err) {
+          console.warn(`Skipping ${btn.textContent.trim()} — file not found`);
+        }
+      }
+
+      if (summaryData.length === 0) {
+        document.getElementById('summaryBox').innerHTML = "<p style='color:red;'>No valid data found.</p>";
+        return;
+      }
+
+      // Normalization helpers
+      const maxPYQ = Math.max(...summaryData.map(s => s.totalPYQ));
+      const maxTopics = Math.max(...summaryData.map(s => s.topicCount));
+      const maxConcentration = Math.max(...summaryData.map(s => s.pyqPerTopic));
+
+      // Balanced importance score (weighted)
+      summaryData.forEach(s => {
+        const normalizedPYQ = s.totalPYQ / maxPYQ;
+        const concentration = s.pyqPerTopic / maxConcentration;
+        const spreadPenalty = Math.pow(s.topicCount / maxTopics, 2);
+        s.score = (
+          0.5 * normalizedPYQ +
+          0.4 * concentration -
+          0.2 * spreadPenalty
+        ).toFixed(3);
       });
-    } catch (err) {
-      console.warn(`Skipping ${btn.textContent.trim()} — file not found`);
-    }
-  }
 
-  // Normalization helpers
-  const maxPYQ = Math.max(...summaryData.map(s => s.totalPYQ));
-  const maxTopics = Math.max(...summaryData.map(s => s.topicCount));
-  const maxConcentration = Math.max(...summaryData.map(s => s.pyqPerTopic));
+      const ranked = [...summaryData].sort((a, b) => b.score - a.score);
+      const highFocus = ranked.slice(0, 3);
+      const lowFocus = ranked.slice(-3).reverse();
 
-  // Balanced importance score (weighted)
-  summaryData.forEach(s => {
-    const normalizedPYQ = s.totalPYQ / maxPYQ;
-    const concentration = s.pyqPerTopic / maxConcentration;
-    const spreadPenalty = Math.pow(s.topicCount / maxTopics, 2);
-    s.score = (
-      0.5 * normalizedPYQ +
-      0.4 * concentration -
-      0.2 * spreadPenalty
-    ).toFixed(3);
-  });
+      document.getElementById('summaryBox').innerHTML = `
+        <h3>📈 Balanced Subject Importance (Outliers Ignored)</h3>
+        <table>
+          <tr>
+            <th>Subject</th>
+            <th>Total PYQs</th>
+            <th>Topics</th>
+            <th>PYQs/Topic</th>
+            <th>Score</th>
+          </tr>
+          ${ranked.map(s => `
+            <tr>
+              <td>${s.subject}</td>
+              <td>${s.totalPYQ}</td>
+              <td>${s.topicCount}</td>
+              <td>${s.pyqPerTopic.toFixed(2)}</td>
+              <td><b>${s.score}</b></td>
+            </tr>`).join('')}
+        </table>
 
-  // Rank subjects
-  const ranked = [...summaryData].sort((a, b) => b.score - a.score);
+        <hr>
+        <h3>🔥 High Priority Subjects</h3>
+        <ul>
+          ${highFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${s.score}</b></li>`).join('')}
+        </ul>
 
-  const highFocus = ranked.slice(0, 3);
-  const lowFocus = ranked.slice(-3).reverse();
+        <h3>🧊 Lower Priority Subjects</h3>
+        <ul>
+          ${lowFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${s.score}</b></li>`).join('')}
+        </ul>
+      `;
 
-  document.getElementById('summaryBox').innerHTML = `
-    <h3>📈 Balanced Subject Importance</h3>
-    <table style="margin:auto; border-collapse:collapse; border:1px solid #ccc;">
-      <tr style="background:#ff6f61; color:white;">
-        <th>Subject</th><th>Total PYQs</th><th>Topics</th>
-        <th>PYQs/Topic</th><th>Importance Score</th>
-      </tr>
-      ${ranked.map(s => `
-        <tr>
-          <td>${s.subject}</td>
-          <td>${s.totalPYQ}</td>
-          <td>${s.topicCount}</td>
-          <td>${s.pyqPerTopic.toFixed(2)}</td>
-          <td><b>${s.score}</b></td>
-        </tr>`).join('')}
-    </table>
-
-    <hr>
-    <h3>🔥 High Priority Subjects</h3>
-    <ul>
-      ${highFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${s.score}</b></li>`).join('')}
-    </ul>
-
-    <h3>🧊 Lower Priority Subjects</h3>
-    <ul>
-      ${lowFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${s.score}</b></li>`).join('')}
-    </ul>
-  `;
-
-  // Optional: visual plot of importance
-  const barData = {
-    x: ranked.map(s => s.subject),
-    y: ranked.map(s => s.score),
-    type: 'bar',
-    marker: { color: ranked.map(s => s.subject === 'Algorithms' ? '#ff4b3e' : '#ff6f61') },
-  };
-
-  Plotly.newPlot('donutChart', [barData], {
-    title: '📊 Balanced Subject Importance Score',
-    xaxis: { title: 'Subjects' },
-    yaxis: { title: 'Importance Score (0–1)' }
-  });
-
-  document.getElementById('treeChart').innerHTML = ''; // Clear other chart
-});
-
-      document.getElementById('treeChart').innerHTML = ''; // Clear other chart
+      // ✅ Remove any leftover visualizations
+      if (document.getElementById('donutChart')) document.getElementById('donutChart').remove();
+      if (document.getElementById('treeChart')) document.getElementById('treeChart').remove();
     });
   </script>
 </body>
