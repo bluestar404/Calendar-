@@ -177,75 +177,100 @@
       });
     });
 
-    // ✅ OVERALL STATS FEATURE
-    document.getElementById('overallBtn').addEventListener('click', async () => {
-      document.getElementById('subjectTitle').textContent = "📊 Overall Stats (All Subjects)";
-      document.getElementById('summaryBox').textContent = 'Calculating...';
+   // ✅ SMART OVERALL STATS FEATURE
+document.getElementById('overallBtn').addEventListener('click', async () => {
+  document.getElementById('subjectTitle').textContent = "📊 Overall Stats (Balanced Importance)";
+  document.getElementById('summaryBox').textContent = 'Analyzing all subjects...';
 
-      const subjectButtons = document.querySelectorAll('.subject-btn[data-file]');
-      let summaryData = [];
+  const subjectButtons = document.querySelectorAll('.subject-btn[data-file]');
+  let summaryData = [];
 
-      // Load all subject data
-      for (let btn of subjectButtons) {
-        try {
-          const res = await fetch(btn.dataset.file);
-          const data = await res.json();
-          const totalPYQ = data.reduce((sum, t) => sum + t.pyq, 0);
-          const topicCount = data.length;
-          summaryData.push({
-            subject: btn.textContent.trim(),
-            totalPYQ,
-            topicCount,
-            concentration: (totalPYQ / topicCount).toFixed(2)
-          });
-        } catch (err) {
-          console.warn(`Skipping ${btn.textContent.trim()} — file not found`);
-        }
-      }
-
-      // Find subjects with high PYQ + few topics (high concentration)
-      const highFocus = [...summaryData]
-        .sort((a, b) => b.concentration - a.concentration)
-        .slice(0, 3);
-
-      // Find subjects with low PYQ per topic (low concentration)
-      const lowFocus = [...summaryData]
-        .sort((a, b) => a.concentration - b.concentration)
-        .slice(0, 3);
-
-      document.getElementById('summaryBox').innerHTML = `
-        <h3>Overall Subject Comparison</h3>
-        <table style="margin:auto; border-collapse:collapse;">
-          <tr><th>Subject</th><th>Total PYQs</th><th>Topics</th><th>PYQ per Topic</th></tr>
-          ${summaryData.map(s => `
-            <tr>
-              <td>${s.subject}</td>
-              <td>${s.totalPYQ}</td>
-              <td>${s.topicCount}</td>
-              <td>${s.concentration}</td>
-            </tr>
-          `).join('')}
-        </table>
-        <hr>
-        <h3>🔥 High Focus Subjects (Few Topics, High PYQs)</h3>
-        <ul>${highFocus.map(s => `<li>${s.subject} — ${s.totalPYQ} PYQs over ${s.topicCount} topics (≈ ${s.concentration}/topic)</li>`).join('')}</ul>
-
-        <h3>🧊 Low Focus Subjects (Many Topics, Fewer PYQs)</h3>
-        <ul>${lowFocus.map(s => `<li>${s.subject} — ${s.totalPYQ} PYQs over ${s.topicCount} topics (≈ ${s.concentration}/topic)</li>`).join('')}</ul>
-      `;
-
-      // Optional: visualize this as a bar chart (optional)
-      const barData = {
-        x: summaryData.map(s => s.subject),
-        y: summaryData.map(s => s.concentration),
-        type: 'bar',
-        marker: { color: '#ff6f61' }
-      };
-      Plotly.newPlot('donutChart', [barData], {
-        title: 'PYQ Concentration (PYQs per Topic)',
-        xaxis: { title: 'Subjects' },
-        yaxis: { title: 'PYQs / Topic' }
+  for (let btn of subjectButtons) {
+    try {
+      const res = await fetch(btn.dataset.file);
+      const data = await res.json();
+      const totalPYQ = data.reduce((sum, t) => sum + t.pyq, 0);
+      const topicCount = data.length;
+      const pyqPerTopic = totalPYQ / topicCount;
+      summaryData.push({
+        subject: btn.textContent.trim(),
+        totalPYQ,
+        topicCount,
+        pyqPerTopic
       });
+    } catch (err) {
+      console.warn(`Skipping ${btn.textContent.trim()} — file not found`);
+    }
+  }
+
+  // Normalization helpers
+  const maxPYQ = Math.max(...summaryData.map(s => s.totalPYQ));
+  const maxTopics = Math.max(...summaryData.map(s => s.topicCount));
+  const maxConcentration = Math.max(...summaryData.map(s => s.pyqPerTopic));
+
+  // Balanced importance score (weighted)
+  summaryData.forEach(s => {
+    const normalizedPYQ = s.totalPYQ / maxPYQ;
+    const concentration = s.pyqPerTopic / maxConcentration;
+    const spreadPenalty = Math.pow(s.topicCount / maxTopics, 2);
+    s.score = (
+      0.5 * normalizedPYQ +
+      0.4 * concentration -
+      0.2 * spreadPenalty
+    ).toFixed(3);
+  });
+
+  // Rank subjects
+  const ranked = [...summaryData].sort((a, b) => b.score - a.score);
+
+  const highFocus = ranked.slice(0, 3);
+  const lowFocus = ranked.slice(-3).reverse();
+
+  document.getElementById('summaryBox').innerHTML = `
+    <h3>📈 Balanced Subject Importance</h3>
+    <table style="margin:auto; border-collapse:collapse; border:1px solid #ccc;">
+      <tr style="background:#ff6f61; color:white;">
+        <th>Subject</th><th>Total PYQs</th><th>Topics</th>
+        <th>PYQs/Topic</th><th>Importance Score</th>
+      </tr>
+      ${ranked.map(s => `
+        <tr>
+          <td>${s.subject}</td>
+          <td>${s.totalPYQ}</td>
+          <td>${s.topicCount}</td>
+          <td>${s.pyqPerTopic.toFixed(2)}</td>
+          <td><b>${s.score}</b></td>
+        </tr>`).join('')}
+    </table>
+
+    <hr>
+    <h3>🔥 High Priority Subjects</h3>
+    <ul>
+      ${highFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${s.score}</b></li>`).join('')}
+    </ul>
+
+    <h3>🧊 Lower Priority Subjects</h3>
+    <ul>
+      ${lowFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${s.score}</b></li>`).join('')}
+    </ul>
+  `;
+
+  // Optional: visual plot of importance
+  const barData = {
+    x: ranked.map(s => s.subject),
+    y: ranked.map(s => s.score),
+    type: 'bar',
+    marker: { color: ranked.map(s => s.subject === 'Algorithms' ? '#ff4b3e' : '#ff6f61') },
+  };
+
+  Plotly.newPlot('donutChart', [barData], {
+    title: '📊 Balanced Subject Importance Score',
+    xaxis: { title: 'Subjects' },
+    yaxis: { title: 'Importance Score (0–1)' }
+  });
+
+  document.getElementById('treeChart').innerHTML = ''; // Clear other chart
+});
 
       document.getElementById('treeChart').innerHTML = ''; // Clear other chart
     });
