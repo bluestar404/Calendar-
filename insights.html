@@ -99,6 +99,9 @@
     <button class="subject-btn" data-file="data/discrete_maths.json">Discrete Maths</button>
     <button class="subject-btn" data-file="data/engineering_maths.json">Engineering Maths</button>
     <button class="subject-btn" data-file="data/aptitude.json">Aptitude</button>
+
+    <!-- ✅ NEW SUBJECT BUTTON -->
+    <button class="subject-btn overall-btn" id="overallBtn">Overall Stats</button>
   </div>
 
   <h2 id="subjectTitle">Select a subject to view insights</h2>
@@ -116,12 +119,10 @@
       <div id="treeChart" style="width:600px; height:500px; margin:auto;"></div>
     </div>
 
-    <!-- ADD NEW CHART CONTAINERS HERE -->
   </div>
 
   <button id="backBtn" onclick="window.location.href='index.html'">⬅ Back to Planner</button>
 
-  <!-- ADD NEW VISUALIZATION SCRIPT FILES HERE -->
   <script src="visualization/donut.js"></script>
   <script src="visualization/treemap.js"></script>
 
@@ -143,7 +144,6 @@
         renderDonutChart(data, subjectDisplayName);
         renderTreeMap(data, subjectDisplayName);
 
-        // ADD NEW VISUALIZATION FUNCTION CALLS HERE
       } catch (error) {
         document.getElementById('summaryBox').innerHTML =
           `<p style="color:red;">Error loading data for "${subjectDisplayName}". Make sure ${fileName} exists.</p>`;
@@ -168,12 +168,86 @@
       `;
     }
 
+    // Handle subject buttons
     document.querySelectorAll('.subject-btn[data-file]').forEach(btn => {
       btn.addEventListener('click', () => {
         const fileName = btn.dataset.file;
         const subjectName = btn.textContent.trim();
         loadSubjectData(fileName, subjectName);
       });
+    });
+
+    // ✅ OVERALL STATS FEATURE
+    document.getElementById('overallBtn').addEventListener('click', async () => {
+      document.getElementById('subjectTitle').textContent = "📊 Overall Stats (All Subjects)";
+      document.getElementById('summaryBox').textContent = 'Calculating...';
+
+      const subjectButtons = document.querySelectorAll('.subject-btn[data-file]');
+      let summaryData = [];
+
+      // Load all subject data
+      for (let btn of subjectButtons) {
+        try {
+          const res = await fetch(btn.dataset.file);
+          const data = await res.json();
+          const totalPYQ = data.reduce((sum, t) => sum + t.pyq, 0);
+          const topicCount = data.length;
+          summaryData.push({
+            subject: btn.textContent.trim(),
+            totalPYQ,
+            topicCount,
+            concentration: (totalPYQ / topicCount).toFixed(2)
+          });
+        } catch (err) {
+          console.warn(`Skipping ${btn.textContent.trim()} — file not found`);
+        }
+      }
+
+      // Find subjects with high PYQ + few topics (high concentration)
+      const highFocus = [...summaryData]
+        .sort((a, b) => b.concentration - a.concentration)
+        .slice(0, 3);
+
+      // Find subjects with low PYQ per topic (low concentration)
+      const lowFocus = [...summaryData]
+        .sort((a, b) => a.concentration - b.concentration)
+        .slice(0, 3);
+
+      document.getElementById('summaryBox').innerHTML = `
+        <h3>Overall Subject Comparison</h3>
+        <table style="margin:auto; border-collapse:collapse;">
+          <tr><th>Subject</th><th>Total PYQs</th><th>Topics</th><th>PYQ per Topic</th></tr>
+          ${summaryData.map(s => `
+            <tr>
+              <td>${s.subject}</td>
+              <td>${s.totalPYQ}</td>
+              <td>${s.topicCount}</td>
+              <td>${s.concentration}</td>
+            </tr>
+          `).join('')}
+        </table>
+        <hr>
+        <h3>🔥 High Focus Subjects (Few Topics, High PYQs)</h3>
+        <ul>${highFocus.map(s => `<li>${s.subject} — ${s.totalPYQ} PYQs over ${s.topicCount} topics (≈ ${s.concentration}/topic)</li>`).join('')}</ul>
+
+        <h3>🧊 Low Focus Subjects (Many Topics, Fewer PYQs)</h3>
+        <ul>${lowFocus.map(s => `<li>${s.subject} — ${s.totalPYQ} PYQs over ${s.topicCount} topics (≈ ${s.concentration}/topic)</li>`).join('')}</ul>
+      `;
+
+      // Optional: visualize this as a bar chart (optional)
+      const barData = {
+        x: summaryData.map(s => s.subject),
+        y: summaryData.map(s => s.concentration),
+        type: 'bar',
+        marker: { color: '#ff6f61' }
+      };
+      Plotly.newPlot('donutChart', [barData], {
+        title: 'PYQ Concentration (PYQs per Topic)',
+        xaxis: { title: 'Subjects' },
+        yaxis: { title: 'PYQs / Topic' }
+      });
+
+      document.getElementById('treeChart').innerHTML = ''; // Clear other chart
     });
   </script>
 </body>
