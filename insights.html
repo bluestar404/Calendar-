@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>GATE Subjects Insights</title>
+  <meta charset="UTF-8" />
+  <title>GATE Subjects Insights — Visual</title>
 
-  <!-- Core Libraries -->
+  <!-- Plotly for charts -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <style>
@@ -37,34 +37,39 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .subject-btn:hover {
-      background: #ff6f61;
-      color: white;
-    }
+    .subject-btn:hover { background: #ff6f61; color: white; }
+
     .summary {
       background: white;
       border-radius: 16px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.1);
       padding: 20px;
       margin: 20px auto;
-      width: 90%;
-      max-width: 900px;
+      width: 95%;
+      max-width: 1100px;
       text-align: left;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin: 14px auto 6px;
     }
-    th, td {
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      text-align: center;
+    @media (min-width: 880px) {
+      .charts { grid-template-columns: 2fr 1fr; }
     }
-    th {
-      background: #ff6f61;
-      color: white;
+    .chart-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      padding: 10px;
+      min-height: 300px;
     }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 8px 10px; border: 1px solid #ddd; text-align: center; }
+    th { background: #ff6f61; color: white; }
+
     #backBtn {
       background: #ff6f61;
       color: white;
@@ -75,9 +80,9 @@
       font-size: 16px;
       margin: 10px;
     }
-    #backBtn:hover {
-      background: #ff4b3e;
-    }
+    #backBtn:hover { background: #ff4b3e; }
+
+    .muted { color: #6b7280; font-size: 13px; }
   </style>
 </head>
 <body>
@@ -97,18 +102,150 @@
     <button class="subject-btn" data-file="data/engineering_maths.json">Engineering Maths</button>
     <button class="subject-btn" data-file="data/aptitude.json">Aptitude</button>
 
-    <!-- ✅ NEW SUBJECT BUTTON -->
     <button class="subject-btn overall-btn" id="overallBtn">Overall Stats</button>
   </div>
 
   <h2 id="subjectTitle">Select a subject to view insights</h2>
+
   <div class="summary" id="summaryBox">No data loaded yet.</div>
+
+  <!-- Chart area -->
+  <div class="summary">
+    <div class="charts" id="chartsArea">
+      <div class="chart-card"><div id="barChart"></div></div>
+      <div class="chart-card"><div id="donutChart"></div></div>
+      <div class="chart-card" style="grid-column: 1 / -1;"><div id="treeChart"></div></div>
+    </div>
+    <div class="muted" id="chartHint">Tip: click legends to filter, drag to zoom, double-click to reset.</div>
+  </div>
 
   <button id="backBtn" onclick="window.location.href='index.html'">⬅ Back to Planner</button>
 
   <script>
     let currentData = [];
     let currentSubject = "";
+
+    // Utilities
+    const fmt = (n) => (Math.round(n * 100) / 100).toLocaleString();
+
+    function clearCharts() {
+      const ids = ['barChart', 'donutChart', 'treeChart'];
+      ids.forEach(id => {
+        if (document.getElementById(id)) {
+          Plotly.purge(id);
+          document.getElementById(id).innerHTML = '';
+        }
+      });
+    }
+
+    function renderSubjectCharts(data, subjectName) {
+      clearCharts();
+
+      const topics = data.map(d => d.topic);
+      const values = data.map(d => d.pyq);
+      const sorted = [...data].sort((a,b)=> b.pyq - a.pyq);
+      const top5 = sorted.slice(0,5);
+      const restSum = sorted.slice(5).reduce((s,t)=> s + t.pyq, 0);
+
+      // Bar chart — all topics
+      Plotly.newPlot('barChart', [
+        {
+          x: topics,
+          y: values,
+          type: 'bar',
+          hovertemplate: '%{x}: %{y} PYQs<extra></extra>'
+        }
+      ], {
+        title: `${subjectName}: PYQs by Topic`,
+        xaxis: { tickangle: -30, automargin: true },
+        yaxis: { title: 'PYQs' },
+        margin: { t: 40, r: 10, b: 120, l: 50 },
+        height: 360
+      }, {responsive: true});
+
+      // Donut — Top 5 vs others
+      Plotly.newPlot('donutChart', [
+        {
+          labels: [...top5.map(t => t.topic), 'Other'],
+          values: [...top5.map(t => t.pyq), restSum],
+          type: 'pie',
+          hole: 0.5,
+          hovertemplate: '%{label}: %{value} PYQs<extra></extra>'
+        }
+      ], {
+        title: `${subjectName}: Concentration (Top 5 vs Others)`,
+        margin: { t: 40, r: 10, b: 10, l: 10 },
+        height: 360
+      }, {responsive: true});
+
+      // Treemap — hierarchical view (Subject → Topic)
+      const labels = ['All Topics', ...data.map(d => d.topic)];
+      const parents = ['', ...data.map(() => 'All Topics')];
+      const valuesT = [data.reduce((s,t)=> s + t.pyq, 0), ...data.map(d => d.pyq)];
+
+      Plotly.newPlot('treeChart', [
+        {
+          type: 'treemap',
+          labels, parents, values: valuesT,
+          hovertemplate: '%{label}: %{value} PYQs<extra></extra>'
+        }
+      ], {
+        title: `${subjectName}: Topic Share Treemap`,
+        margin: { t: 40, r: 10, b: 10, l: 10 },
+        height: 420
+      }, {responsive: true});
+    }
+
+    function renderOverallCharts(summaryData) {
+      clearCharts();
+
+      // Donut — PYQs share by subject
+      Plotly.newPlot('donutChart', [
+        {
+          labels: summaryData.map(s => s.subject),
+          values: summaryData.map(s => s.totalPYQ),
+          type: 'pie',
+          hole: 0.45,
+          hovertemplate: '%{label}: %{value} PYQs<extra></extra>'
+        }
+      ], {
+        title: 'Overall: PYQs Share by Subject',
+        margin: { t: 40, r: 10, b: 10, l: 10 },
+        height: 360
+      }, {responsive: true});
+
+      // Bar — Balanced score ranking
+      const ranked = [...summaryData].sort((a,b) => b.score - a.score);
+      Plotly.newPlot('barChart', [
+        {
+          x: ranked.map(r => r.subject),
+          y: ranked.map(r => Number(r.score)),
+          type: 'bar',
+          hovertemplate: '%{x}: %{y}<extra>Balanced Score</extra>'
+        }
+      ], {
+        title: 'Overall: Balanced Importance Score (Higher = Focus more)',
+        xaxis: { tickangle: -20, automargin: true },
+        yaxis: { title: 'Score' },
+        margin: { t: 40, r: 10, b: 120, l: 50 },
+        height: 360
+      }, {responsive: true});
+
+      // Treemap — Subjects (root) only for quick visual size comparison
+      const total = summaryData.reduce((s,x)=> s + x.totalPYQ, 0);
+      const labels = ['All Subjects', ...summaryData.map(s => s.subject)];
+      const parents = ['', ...summaryData.map(() => 'All Subjects')];
+      const values = [total, ...summaryData.map(s => s.totalPYQ)];
+
+      Plotly.newPlot('treeChart', [{
+        type: 'treemap', labels, parents, values,
+        hovertemplate: '%{label}: %{value} PYQs<extra></extra>'
+      }], {
+        title: 'Overall: Subject Share Treemap',
+        margin: { t: 40, r: 10, b: 10, l: 10 },
+        height: 420
+      }, {responsive: true});
+    }
 
     async function loadSubjectData(fileName, subjectDisplayName) {
       document.getElementById('subjectTitle').textContent = `📘 ${subjectDisplayName}`;
@@ -121,10 +258,12 @@
         currentSubject = subjectDisplayName;
 
         renderSummary(data, subjectDisplayName);
+        renderSubjectCharts(data, subjectDisplayName);
 
       } catch (error) {
         document.getElementById('summaryBox').innerHTML =
           `<p style="color:red;">Error loading data for "${subjectDisplayName}". Make sure ${fileName} exists.</p>`;
+        clearCharts();
       }
     }
 
@@ -137,12 +276,12 @@
 
       document.getElementById('summaryBox').innerHTML = `
         <h3>${subjectName}</h3>
-        <p><strong>Total PYQs:</strong> ${totalPYQs}</p>
-        <p>Average PYQs per topic: ${avg}</p>
-        <p>Highest: ${max}, Lowest: ${min}</p>
+        <p><strong>Total PYQs:</strong> ${fmt(totalPYQs)}</p>
+        <p>Average PYQs per topic: ${fmt(avg)}</p>
+        <p>Highest: ${fmt(max)}, Lowest: ${fmt(min)}</p>
         <h4>Top 5 Topics:</h4>
         <ul style="list-style:none; padding:0;">
-          ${topTopics.map(t => `<li>${t.topic} — ${t.pyq} PYQs</li>`).join('')}
+          ${topTopics.map(t => `<li>${t.topic} — ${fmt(t.pyq)} PYQs</li>`).join('')}
         </ul>
       `;
     }
@@ -156,7 +295,7 @@
       });
     });
 
-    // ✅ SMART OVERALL STATS FEATURE (with outlier handling)
+    // SMART OVERALL STATS FEATURE (with outlier handling)
     document.getElementById('overallBtn').addEventListener('click', async () => {
       document.getElementById('subjectTitle').textContent = "📊 Overall Stats (Balanced Importance)";
       document.getElementById('summaryBox').textContent = 'Analyzing all subjects...';
@@ -170,7 +309,7 @@
           const data = await res.json();
           const totalPYQ = data.reduce((sum, t) => sum + t.pyq, 0);
 
-          // ✅ Ignore outliers
+          // Ignore outliers
           if (totalPYQ > 400) {
             console.warn(`Ignoring ${btn.textContent.trim()} (outlier: ${totalPYQ} PYQs)`);
             continue;
@@ -191,6 +330,7 @@
 
       if (summaryData.length === 0) {
         document.getElementById('summaryBox').innerHTML = "<p style='color:red;'>No valid data found.</p>";
+        clearCharts();
         return;
       }
 
@@ -208,7 +348,8 @@
           0.5 * normalizedPYQ +
           0.4 * concentration -
           0.2 * spreadPenalty
-        ).toFixed(3);
+        );
+        s.score = Number(s.score.toFixed(3));
       });
 
       const ranked = [...summaryData].sort((a, b) => b.score - a.score);
@@ -228,28 +369,34 @@
           ${ranked.map(s => `
             <tr>
               <td>${s.subject}</td>
-              <td>${s.totalPYQ}</td>
-              <td>${s.topicCount}</td>
-              <td>${s.pyqPerTopic.toFixed(2)}</td>
-              <td><b>${s.score}</b></td>
+              <td>${fmt(s.totalPYQ)}</td>
+              <td>${fmt(s.topicCount)}</td>
+              <td>${fmt(s.pyqPerTopic)}</td>
+              <td><b>${fmt(s.score)}</b></td>
             </tr>`).join('')}
         </table>
 
         <hr>
         <h3>🔥 High Priority Subjects</h3>
         <ul>
-          ${highFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${s.score}</b></li>`).join('')}
+          ${highFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${fmt(s.score)}</b></li>`).join('')}
         </ul>
 
         <h3>🧊 Lower Priority Subjects</h3>
         <ul>
-          ${lowFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${s.score}</b></li>`).join('')}
+          ${lowFocus.map(s => `<li>${s.subject} — Balanced Score: <b>${fmt(s.score)}</b></li>`).join('')}
         </ul>
       `;
 
-      // ✅ Remove any leftover visualizations
-      if (document.getElementById('donutChart')) document.getElementById('donutChart').remove();
-      if (document.getElementById('treeChart')) document.getElementById('treeChart').remove();
+      renderOverallCharts(summaryData);
+    });
+
+    // Resize handling for responsiveness
+    window.addEventListener('resize', () => {
+      ['barChart','donutChart','treeChart'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.data) Plotly.Plots.resize(el);
+      });
     });
   </script>
 </body>
