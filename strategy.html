@@ -441,7 +441,7 @@
     </div>
 
     <footer>
-      GATE Insights v2.3 • Local Storage Only • <a href="#" onclick="return false;" style="color:inherit">Help</a>
+      GATE Insights v2.4 • Local Storage Only • <a href="#" onclick="return false;" style="color:inherit">Help</a>
     </footer>
   </div>
 
@@ -496,26 +496,35 @@
       const fetchPromises = dataFiles.map(name => 
         fetch(`data/${name}.json`)
           .then(r => r.ok ? r.json() : null)
+          .then(data => ({ name, data })) // Pass name to identify subject
           .catch(() => null)
       );
 
       try {
         const results = await Promise.all(fetchPromises);
-        const validResults = results.filter(r => r !== null);
+        const validResults = results.filter(r => r && r.data);
         
         if (validResults.length > 0) {
-          let merged = [];
-          validResults.forEach(res => {
-            if(Array.isArray(res)) merged = merged.concat(res);
-            else merged.push(res);
+          // transform the raw data into subject objects
+          subjectsData = validResults.map(({ name, data }) => {
+            // If the JSON is just an array of topics (common), wrap it
+            // Derive nicer name from filename: "computer_networks" -> "Computer Networks"
+            const prettyName = name.split('_')
+              .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+              .join(' ');
+            
+            if (Array.isArray(data)) {
+               return { subject: prettyName, topics: data };
+            } 
+            // If it's already structured { subject: "...", topics: [...] }
+            else if (data.topics) {
+               return { subject: data.subject || prettyName, topics: data.topics };
+            }
+            return { subject: prettyName, topics: [] };
           });
-          
-          if(merged.length > 0) {
-            subjectsData = merged;
-            els.dataErrorMsg.style.display = 'none';
-          }
+
+          els.dataErrorMsg.style.display = 'none';
         } else {
-          // No valid results found
           console.warn("Fetch failed: No data files loaded.");
           els.subjectsList.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px; color:var(--text-muted);">No data loaded</div>';
           els.dataErrorMsg.style.display = 'block';
@@ -525,26 +534,15 @@
         els.dataErrorMsg.style.display = 'block';
       }
 
-      // Render (Even if empty, to show the empty state or error)
+      // Render
       renderSubjectRatings();
       
       if(plan) {
         showResults();
-        // Recalculate scores using the loaded data (if any) or stored plan data?
-        // Ideally we should use loaded data to reflect file changes, but if files fail we might break visual.
-        // For robustness, if subjectsData is empty but plan exists, we can still show the plan visually
-        // but generating NEW plans will be impossible.
-        if(subjectsData.length > 0) {
-            renderPriority(plan.flat); // Re-rendering with potentially new data logic if needed, but here just reusing plan
-            renderScheduleGrid(plan.schedule);
-            updateSummaryText();
-        } else {
-            // Plan exists but data fetch failed. Show plan anyway?
-            // Yes, strictly relying on saved JSON plan for display.
-            renderPriority(plan.flat);
-            renderScheduleGrid(plan.schedule);
-            updateSummaryText();
-        }
+        // Just render the plan as is
+        renderPriority(plan.flat);
+        renderScheduleGrid(plan.schedule);
+        updateSummaryText();
       } else {
         showEmpty();
       }
