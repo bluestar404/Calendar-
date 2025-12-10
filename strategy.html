@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>GATE Insights — Personalized Strategy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --danger: #ef4444;
+      --radius: 12px;
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    header {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      padding: 16px 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo-icon {
+      background: var(--primary);
+      color: white;
+      padding: 6px;
+      border-radius: 8px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin: 0 0 16px 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Inputs */
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
+    
+    input[type="number"], input[type="text"], select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-family: inherit;
+      font-size: 14px;
+      transition: all 0.2s;
+      background: #f8fafc;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    /* Subject List Grid */
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    
+    /* Scrollbar for subjects */
+    .subjects-grid::-webkit-scrollbar { width: 4px; }
+    .subjects-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+    .subject-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+    }
+    .subject-name { font-size: 12px; font-weight: 600; color: var(--text-main); line-height: 1.2;}
+    .subject-select { 
+      padding: 4px 8px; 
+      font-size: 12px; 
+      height: 30px; 
+      background: white;
+    }
+
+    /* Buttons */
+    .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn:active { transform: translateY(1px); }
+    
+    .btn-primary { 
+      background: var(--primary); 
+      color: white; 
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+    }
+    .btn-primary:hover { background: var(--primary-hover); box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.3); }
+    
+    .btn-secondary { background: white; border: 1px solid var(--border); color: var(--text-muted); }
+    .btn-secondary:hover { background: #f8fafc; color: var(--text-main); border-color: #cbd5e1; }
+    
+    .btn-danger { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
+    .btn-danger:hover { background: #fee2e2; }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .empty-icon { 
+      font-size: 64px; 
+      margin-bottom: 24px; 
+      opacity: 0.8; 
+      background: #f1f5f9;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    /* Results Area */
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .tag {
+      background: #e0e7ff;
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Priority Grid */
+    .priority-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    
+    .topic-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .topic-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--primary);
+      opacity: 0.5;
+    }
+    .topic-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+    .topic-card:hover::before { opacity: 1; }
+    
+    .topic-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .topic-name { font-weight: 600; font-size: 15px; line-height: 1.3; color: var(--text-main); }
+    .topic-sub { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    
+    .progress-track { height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; margin: 12px 0 8px 0; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #818cf8); width: 0; transition: width 1s ease-out; }
+
+    .meta-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+    .badge { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+
+    /* Schedule */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .day-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .day-card.today {
+      border: 2px solid var(--primary);
+      background: #eef2ff;
+    }
+    .day-card.today .date-label { color: var(--primary); }
+    
+    .date-label { font-weight: 700; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+    
+    .task-list { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
+    .task-item {
+      font-size: 11px;
+      padding: 6px 8px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      border-left: 2px solid #cbd5e1;
+      line-height: 1.3;
+    }
+    .day-card.today .task-item { border-left-color: var(--primary); }
+
+    /* Footer */
+    footer { text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 12px; }
+
+    /* Animations */
+    .fade-in { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Utility */
+    .loading-spinner {
+      border: 2px solid #f3f3f3; border-top: 2px solid var(--primary); border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>
+        <div class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+        </div>
+        GATE Insights
+      </h1>
+      <button id="deletePlanBtn" class="btn btn-danger" style="width: auto; padding: 8px 16px; font-size: 12px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+        Reset App
+      </button>
+    </header>
+
+    <div class="layout">
+      <!-- Left Column: Inputs -->
+      <div class="left-panel">
+        
+        <!-- Profile Section -->
+        <div class="card">
+          <h3 class="section-title">1. Time Constraint</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group" style="margin:0">
+              <label>Days Left</label>
+              <input id="daysLeft" type="number" min="1" value="60" />
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Daily Hours</label>
+              <input id="hoursPerDay" type="number" min="1" value="4" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Preferences Section -->
+        <div class="card">
+          <h3 class="section-title">2. Strategy Style</h3>
+          <div class="form-group">
+            <label>Prioritization Logic</label>
+            <select id="strategyStyle">
+              <option value="balanced">Balanced (Mix of all)</option>
+              <option value="high-impact">High-Impact (High weightage first)</option>
+              <option value="weak-first">Weak Areas First</option>
+              <option value="momentum">Momentum (Easier topics first)</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label>Off Days (0=Sun, 6=Sat)</label>
+            <input id="offDays" type="text" placeholder="e.g. 0, 6" />
+          </div>
+        </div>
+
+        <!-- Subjects Section -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom: 1px solid var(--border); padding-bottom:12px;">
+             <h3 style="margin:0; font-size:15px; font-weight:600; color:var(--text-muted);">3. Confidence Check</h3>
+             <span id="subjectCountBadge" style="font-size:11px; background:#f1f5f9; padding:2px 6px; border-radius:4px;">0 Subjects</span>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Rate your confidence (1=Low, 5=High) to adjust focus.</p>
+          <div id="subjectsList" class="subjects-grid">
+            <div style="grid-column: 1 / -1; text-align:center; padding:20px; color:var(--text-muted);">
+              <span class="loading-spinner"></span> Loading syllabus data...
+            </div>
+          </div>
+          <div id="dataErrorMsg" style="display:none; color:var(--danger); font-size:12px; margin-top:10px; text-align:center; background:#fef2f2; padding:8px; border-radius:8px;">
+            ⚠ Could not load local data files. Ensure you are running a local server to fetch "data/*.json".
+          </div>
+        </div>
+
+        <button id="generateBtn" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+          Generate Personalized Strategy
+        </button>
+
+      </div>
+
+      <!-- Right Column: Outputs -->
+      <div class="right-panel">
+        
+        <!-- Empty State (Shown initially) -->
+        <div id="emptyState" class="card empty-state">
+          <div class="empty-icon">📊</div>
+          <h3 style="margin:0 0 8px 0; font-size: 18px;">No Strategy Yet</h3>
+          <p style="max-width:300px; margin: 0;">Configure your exam parameters on the left and click Generate to see your personalized roadmap.</p>
+        </div>
+
+        <!-- Results (Hidden initially) -->
+        <div id="resultsArea" style="display:none;">
+          <div class="card fade-in">
+            <div class="results-header">
+              <h3 style="margin:0">Action Plan</h3>
+              <div id="planSummary" class="tag">0 Topics</div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <h4 style="margin:0; font-size:14px; font-weight:600;">Top Priority Topics</h4>
+              <span style="font-size:11px; color:var(--text-muted);">Based on Weightage vs. Weakness</span>
+            </div>
+            
+            <div id="priorityContainer" class="priority-grid"></div>
+
+            <div style="margin-top:32px; border-top:1px solid var(--border); padding-top:20px;">
+              <h4 style="margin:0 0 16px 0; font-size:14px; font-weight:600;">Daily Schedule</h4>
+              <div id="scheduleContainer" class="schedule-grid"></div>
+            </div>
+
+            <div class="btn-group">
+              <button id="regenerateBtn" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"></path></svg>
+                Recalibrate Plan
+              </button>
+              <button id="exportBtn" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export JSON
+              </button>
+            </div>
+            <div id="quips" style="margin-top:16px; font-size:12px; color:var(--text-muted); text-align:center; font-style:italic;"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer>
+      GATE Insights v2.3 • Local Storage Only • <a href="#" onclick="return false;" style="color:inherit">Help</a>
+    </footer>
+  </div>
+
+  <script>
+    // --- constants ---
+    const LS_PROFILE = 'gate_profile_v2';
+    const LS_PLAN = 'gate_plan_v2';
+
+    // --- DOM Elements ---
+    const els = {
+      daysLeft: document.getElementById('daysLeft'),
+      hoursPerDay: document.getElementById('hoursPerDay'),
+      strategyStyle: document.getElementById('strategyStyle'),
+      offDays: document.getElementById('offDays'),
+      subjectsList: document.getElementById('subjectsList'),
+      subjectCountBadge: document.getElementById('subjectCountBadge'),
+      generateBtn: document.getElementById('generateBtn'),
+      priorityContainer: document.getElementById('priorityContainer'),
+      scheduleContainer: document.getElementById('scheduleContainer'),
+      planSummary: document.getElementById('planSummary'),
+      regenerateBtn: document.getElementById('regenerateBtn'),
+      exportBtn: document.getElementById('exportBtn'),
+      deletePlanBtn: document.getElementById('deletePlanBtn'),
+      quips: document.getElementById('quips'),
+      emptyState: document.getElementById('emptyState'),
+      resultsArea: document.getElementById('resultsArea'),
+      dataErrorMsg: document.getElementById('dataErrorMsg')
+    };
+
+    // --- Filtered File List (Core Only) ---
+    // Excluded: aptitude, discrete_maths, engineering_maths
+    const dataFiles = [
+      'algorithms', 
+      'compiler_design', 
+      'computer_architecture',
+      'computer_networks', 
+      'data_structures', 
+      'dbms', 
+      'digital_logic',
+      'operating_system',
+      'programming_in_c', 
+      'theory_of_computation'
+    ];
+
+    let subjectsData = []; // Starts empty, no hardcoded data!
+    let profile = loadJson(LS_PROFILE) || { confidence: {} };
+    let plan = loadJson(LS_PLAN) || null;
+
+    // --- Initialization ---
+    async function init() {
+      // Attempt to fetch specified files in parallel
+      const fetchPromises = dataFiles.map(name => 
+        fetch(`data/${name}.json`)
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null)
+      );
+
+      try {
+        const results = await Promise.all(fetchPromises);
+        const validResults = results.filter(r => r !== null);
+        
+        if (validResults.length > 0) {
+          let merged = [];
+          validResults.forEach(res => {
+            if(Array.isArray(res)) merged = merged.concat(res);
+            else merged.push(res);
+          });
+          
+          if(merged.length > 0) {
+            subjectsData = merged;
+            els.dataErrorMsg.style.display = 'none';
+          }
+        } else {
+          // No valid results found
+          console.warn("Fetch failed: No data files loaded.");
+          els.subjectsList.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px; color:var(--text-muted);">No data loaded</div>';
+          els.dataErrorMsg.style.display = 'block';
+        }
+      } catch(e) {
+        console.error("Critical fetch error:", e);
+        els.dataErrorMsg.style.display = 'block';
+      }
+
+      // Render (Even if empty, to show the empty state or error)
+      renderSubjectRatings();
+      
+      if(plan) {
+        showResults();
+        // Recalculate scores using the loaded data (if any) or stored plan data?
+        // Ideally we should use loaded data to reflect file changes, but if files fail we might break visual.
+        // For robustness, if subjectsData is empty but plan exists, we can still show the plan visually
+        // but generating NEW plans will be impossible.
+        if(subjectsData.length > 0) {
+            renderPriority(plan.flat); // Re-rendering with potentially new data logic if needed, but here just reusing plan
+            renderScheduleGrid(plan.schedule);
+            updateSummaryText();
+        } else {
+            // Plan exists but data fetch failed. Show plan anyway?
+            // Yes, strictly relying on saved JSON plan for display.
+            renderPriority(plan.flat);
+            renderScheduleGrid(plan.schedule);
+            updateSummaryText();
+        }
+      } else {
+        showEmpty();
+      }
+    }
+
+    // --- Core Logic ---
+
+    function computeTopicScores(currentProfile, style) {
+      const flat = [];
+      let maxPYQ = 0;
+      
+      if(subjectsData.length === 0) {
+          alert("Cannot generate strategy: No subject data loaded.");
+          return [];
+      }
+
+      // Flatten and find max constants
+      subjectsData.forEach(s => {
+        if(!s.topics) return;
+        s.topics.forEach(t => {
+          flat.push({...t, subject: s.subject});
+          maxPYQ = Math.max(maxPYQ, t.pyq || 0);
+        });
+      });
+
+      flat.forEach(t => {
+        const impact = (t.pyq || 0) / (maxPYQ || 1);
+        const userConf = (currentProfile.confidence && currentProfile.confidence[t.subject]) ? currentProfile.confidence[t.subject] : 3;
+        
+        // Lower confidence = Higher Weightage for "weak-first"
+        const weaknessWeight = (6 - userConf) / 5; 
+        
+        const effort = (t.difficulty || 3) * (t.breadth || 3);
+        
+        // Base Score: Impact has slight edge over weakness by default
+        let final = (0.6 * impact + 0.4 * weaknessWeight) / (effort || 1);
+
+        // Modifiers
+        if(style === 'high-impact') final *= (1 + 0.6 * impact); // Boosted impact
+        if(style === 'weak-first') final *= (1 + 0.6 * weaknessWeight); // Boosted weakness
+        if(style === 'momentum') final *= (1 + 0.3 * (1 / (t.difficulty || 1)));
+
+        t._score = Number(final.toFixed(4));
+        t._impact = impact;
+        t._weakness = weaknessWeight;
+      });
+
+      // Sort descending by score
+      flat.sort((a,b) => b._score - a._score);
+      return flat;
+    }
+
+    function scheduleTopics(flatTopics, daysLeft, hoursPerDay, offDaysList) {
+      if(flatTopics.length === 0) return [];
+
+      // Assign estimated hours based on difficulty and breadth
+      flatTopics.forEach(t => {
+        const base = 2; 
+        // Heuristic: (Diff + Breadth) / 2 * Scaling Factor
+        const hrs = base + ( (t.difficulty||3) + (t.breadth||3) ) * 0.4;
+        t.estimatedHours = Math.round(hrs * 2) / 2; 
+      });
+
+      const schedule = [];
+      const today = new Date();
+      
+      // Create buckets
+      for(let i=0; i<daysLeft; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+        const dow = d.getDay();
+        
+        if(offDaysList.includes(dow)) continue;
+        
+        schedule.push({
+          date: d.toISOString().slice(0,10),
+          displayDate: d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}),
+          capacity: hoursPerDay,
+          tasks: []
+        });
+      }
+
+      // Greedy fill with topic mixing
+      const tasks = flatTopics.map(t => ({...t, remaining: t.estimatedHours}));
+      let taskIdx = 0;
+
+      // Iteration: Try to fill days. 
+      for (const day of schedule) {
+        if(taskIdx >= tasks.length) break;
+        
+        while (day.capacity >= 0.5 && taskIdx < tasks.length) {
+          const task = tasks[taskIdx];
+          
+          // Allocate max 2.5h per topic per day for variety
+          const allocation = Math.min(day.capacity, task.remaining, 2.5);
+          
+          if(allocation > 0) {
+            day.tasks.push({
+              topic: task.topic,
+              subject: task.subject,
+              hours: allocation,
+              score: task._score
+            });
+            day.capacity -= allocation;
+            task.remaining -= allocation;
+          }
+
+          if (task.remaining <= 0.1) {
+            taskIdx++;
+          } else {
+            // Task not finished. If day is full, break to next day.
+            if(day.capacity < 0.5) break; 
+            break;
+          }
+        }
+      }
+
+      return schedule;
+    }
+
+    async function generate() {
+      // Gather inputs
+      const daysLeft = Number(els.daysLeft.value) || 30;
+      const hoursPerDay = Number(els.hoursPerDay.value) || 3;
+      const style = els.strategyStyle.value;
+      const offDays = els.offDays.value.split(',').map(s=>Number(s.trim())).filter(n=>!isNaN(n));
+
+      // Save Profile
+      saveJson(LS_PROFILE, profile);
+
+      // Processing
+      const flat = computeTopicScores(profile, style);
+      
+      // If no data, stop
+      if(flat.length === 0) return;
+
+      const schedule = scheduleTopics(flat, daysLeft, hoursPerDay, offDays);
+      const totalHours = flat.reduce((s,t) => s + (t.estimatedHours || 0), 0);
+
+      // Create Plan Object
+      plan = {
+        generatedAt: new Date().toISOString(),
+        inputs: { daysLeft, hoursPerDay, style, offDays },
+        totalHours,
+        flat,
+        schedule
+      };
+      
+      saveJson(LS_PLAN, plan);
+
+      // Render
+      showResults();
+      renderPriority(flat);
+      renderScheduleGrid(schedule);
+      updateSummaryText();
+      showQuip();
+      
+      if(window.innerWidth < 1024) {
+        els.resultsArea.scrollIntoView({behavior:'smooth'});
+      }
+    }
+
+    // --- UI Rendering ---
+
+    function renderSubjectRatings() {
+      if(subjectsData.length === 0) {
+         // Don't clear if it's showing the error/loading state
+         return;
+      }
+      els.subjectsList.innerHTML = '';
+      els.subjectCountBadge.textContent = `${subjectsData.length} Subjects`;
+
+      subjectsData.forEach(s => {
+        const item = document.createElement('div');
+        item.className = 'subject-item';
+        
+        const name = document.createElement('span');
+        name.className = 'subject-name';
+        name.textContent = s.subject;
+        
+        const select = document.createElement('select');
+        select.className = 'subject-select';
+        
+        const levels = [
+          {v:1, l:'1 - Novice'},
+          {v:2, l:'2 - Beginner'},
+          {v:3, l:'3 - Average'},
+          {v:4, l:'4 - Good'},
+          {v:5, l:'5 - Expert'}
+        ];
+
+        levels.forEach(lvl => {
+          const opt = document.createElement('option');
+          opt.value = lvl.v;
+          opt.textContent = lvl.l;
+          if(lvl.v === 3) opt.selected = true; 
+          select.appendChild(opt);
+        });
+
+        // Set value from profile if exists
+        if(profile.confidence[s.subject]) {
+          select.value = profile.confidence[s.subject];
+        }
+
+        select.addEventListener('change', () => {
+          profile.confidence[s.subject] = Number(select.value);
+        });
+
+        item.appendChild(name);
+        item.appendChild(select);
+        els.subjectsList.appendChild(item);
+      });
+    }
+
+    function renderPriority(flatTopics) {
+      els.priorityContainer.innerHTML = '';
+      // Top 15 topics
+      flatTopics.slice(0, 15).forEach((t, index) => {
+        const div = document.createElement('div');
+        div.className = 'topic-card';
+        div.innerHTML = `
+          <div class="topic-header">
+            <span class="topic-name">#${index+1} ${t.topic}</span>
+            <div class="badge">${t.pyq} PYQs</div>
+          </div>
+          <div class="topic-sub">${t.subject}</div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: ${Math.min(100, t._score * 180)}%"></div>
+          </div>
+          <div class="meta-row">
+            <span>Diff: ${t.difficulty}/5</span>
+            <span>Est: ${t.estimatedHours}h</span>
+          </div>
+        `;
+        els.priorityContainer.appendChild(div);
+      });
+    }
+
+    function renderScheduleGrid(schedule) {
+      els.scheduleContainer.innerHTML = '';
+      const todayStr = new Date().toISOString().slice(0,10);
+      
+      if(schedule.length === 0) {
+        els.scheduleContainer.innerHTML = '<div style="color:var(--text-muted); font-size:13px; padding:20px;">Not enough time configured to schedule tasks.</div>';
+        return;
+      }
+
+      schedule.forEach(day => {
+        const div = document.createElement('div');
+        div.className = `day-card ${day.date === todayStr ? 'today' : ''}`;
+        
+        let tasksHtml = '';
+        if(day.tasks.length > 0) {
+          tasksHtml = `<div class="task-list">` + 
+            day.tasks.map(t => `<div class="task-item"><b>${t.topic}</b> <span style="color:#64748b">(${t.hours}h)</span></div>`).join('') +
+            `</div>`;
+        } else {
+          tasksHtml = `<div style="font-size:11px; color:#cbd5e1; margin-top:auto">Free Day</div>`;
+        }
+
+        div.innerHTML = `
+          <div class="date-label">${day.displayDate}</div>
+          ${tasksHtml}
+        `;
+        els.scheduleContainer.appendChild(div);
+      });
+    }
+
+    function updateSummaryText() {
+      if(!plan) return;
+      els.planSummary.textContent = `${plan.flat.length} Topics · ${Math.round(plan.totalHours)}h Total`;
+    }
+
+    function showResults() {
+      els.emptyState.style.display = 'none';
+      els.resultsArea.style.display = 'block';
+    }
+
+    function showEmpty() {
+      els.emptyState.style.display = 'flex';
+      els.resultsArea.style.display = 'none';
+    }
+
+    function showQuip() {
+      const q = [
+        "Plan locked. Execution is the only variable left.",
+        "A goal without a plan is just a wish. You have a plan now.",
+        "Your future self is thanking you already.",
+        "Efficiency is doing things right. Effectiveness is doing the right things.",
+        "Strategy generated. Time to execute."
+      ];
+      els.quips.textContent = q[Math.floor(Math.random() * q.length)];
+    }
+
+    // --- Reset Logic ---
+    function resetApp() {
+      if(!confirm("Resetting will delete your saved profile and plan. Continue?")) return;
+
+      localStorage.removeItem(LS_PROFILE);
+      localStorage.removeItem(LS_PLAN);
+
+      plan = null;
+      profile = { confidence: {} };
+
+      // Defaults
+      els.daysLeft.value = 60;
+      els.hoursPerDay.value = 4;
+      els.strategyStyle.value = 'balanced';
+      els.offDays.value = '';
+
+      // Clear logic
+      // We don't need to re-fetch, but we might need to re-render subjects to clear selections
+      renderSubjectRatings(); // Resets dropdowns to default because profile is wiped
+
+      els.priorityContainer.innerHTML = '';
+      els.scheduleContainer.innerHTML = '';
+      els.planSummary.textContent = '0 Topics';
+      els.quips.textContent = '';
+      
+      showEmpty();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // --- Helpers ---
+    function saveJson(key, obj){ try{ localStorage.setItem(key, JSON.stringify(obj)); }catch(e){} }
+    function loadJson(key){ try{ const s = localStorage.getItem(key); return s? JSON.parse(s): null }catch(e){ return null } }
+
+    // --- Event Listeners ---
+    els.generateBtn.addEventListener('click', generate);
+    els.regenerateBtn.addEventListener('click', generate);
+    els.deletePlanBtn.addEventListener('click', resetApp);
+    
+    els.exportBtn.addEventListener('click', () => {
+      if(!plan) return;
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(plan, null, 2));
+      const downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", "gate_strategy_v2.json");
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+    });
+
+    // Start
+    init();
+
+  </script>
+</body>
+</html>
