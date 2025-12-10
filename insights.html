@@ -354,7 +354,7 @@
     
     <div style="margin-bottom: 10px;">
         <h2 style="text-align:center; font-size:1.5rem; color:#2d3748; margin-bottom:5px;">Your Strategic Roadmap</h2>
-        <p style="text-align:center; color:#718096; margin-top:0;">Path to finish by Feb 5, 2026 (Dec 10 Start)</p>
+        <p style="text-align:center; color:#718096; margin-top:0;">Path to finish by Feb 5, 2026 (Dec 10 Start) — Technical Subjects Only</p>
     </div>
 
     <!-- Roadmap Cards -->
@@ -382,6 +382,14 @@
 
     // --- Configuration ---
     const COLORS = ['#ff6f61', '#4fd1c5', '#f6ad55', '#63b3ed', '#9f7aea', '#ed64a6', '#a0aec0', '#48bb78', '#ecc94b', '#667eea'];
+    
+    // --- EXCLUDED SUBJECTS (Outliers) ---
+    // Engineering Math, Aptitude, Discrete Maths
+    const IGNORED_FILES = new Set([
+      'data/engineering_maths.json', 
+      'data/aptitude.json', 
+      'data/discrete_maths.json'
+    ]);
 
     // --- DOM Elements ---
     const loader = document.getElementById('loader');
@@ -449,7 +457,7 @@
         return buckets;
     }
 
-    // --- VIEW 1: Subject Detail ---
+    // --- VIEW 1: Subject Detail (Individual buttons still load all subjects) ---
     async function loadSubject(btn) {
       const url = btn.dataset.file;
       resetUI(); btn.classList.add('active');
@@ -513,12 +521,15 @@
       });
     }
 
-    // --- VIEW 2: Overall ---
+    // --- VIEW 2: Overall (Filters Outliers) ---
     async function loadOverall() {
       resetUI(); document.getElementById('overallBtn').classList.add('active');
-      const buttons = document.querySelectorAll('.btn[data-file]');
       
-      const fetchPromises = Array.from(buttons).map(async btn => {
+      // Filter Buttons
+      const buttons = Array.from(document.querySelectorAll('.btn[data-file]'))
+        .filter(btn => !IGNORED_FILES.has(btn.dataset.file));
+      
+      const fetchPromises = buttons.map(async btn => {
         const d = await fetchData(btn.dataset.file);
         return d ? { subject: btn.textContent, data: d } : null;
       });
@@ -577,12 +588,15 @@
         });
     }
 
-    // --- VIEW 3: Pareto ---
+    // --- VIEW 3: Pareto (Filters Outliers) ---
     async function loadPareto() {
       resetUI(); document.getElementById('paretoBtn').classList.add('active');
-      const buttons = document.querySelectorAll('.btn[data-file]');
       
-      const fetchPromises = Array.from(buttons).map(async btn => {
+      // Filter Buttons
+      const buttons = Array.from(document.querySelectorAll('.btn[data-file]'))
+        .filter(btn => !IGNORED_FILES.has(btn.dataset.file));
+      
+      const fetchPromises = buttons.map(async btn => {
         const d = await fetchData(btn.dataset.file);
         return d ? { subject: btn.textContent, data: d } : null;
       });
@@ -593,8 +607,6 @@
     }
 
     function processParetoData(results) {
-        // Reuse categorization logic? But we need to render specific HTML here.
-        // Let's do it inline for now to keep specific HTML formatting.
         const buckets = { l1: [], l2: [], l3: [], opt: [] };
         
         results.forEach(sub => {
@@ -624,13 +636,16 @@
         document.getElementById('lvlOptContent').innerHTML = buckets.opt.sort(sort).map(i=>i.html).join('');
     }
 
-    // --- VIEW 4: Timeline & Roadmap (IMPROVED) ---
+    // --- VIEW 4: Timeline & Roadmap (Filters Outliers) ---
     async function loadTimeline() {
         resetUI(); document.getElementById('timelineBtn').classList.add('active');
         
         // 1. Get All Data & Categorize
-        const buttons = document.querySelectorAll('.btn[data-file]');
-        const fetchPromises = Array.from(buttons).map(async btn => {
+        // Filter Buttons
+        const buttons = Array.from(document.querySelectorAll('.btn[data-file]'))
+            .filter(btn => !IGNORED_FILES.has(btn.dataset.file));
+
+        const fetchPromises = buttons.map(async btn => {
             const d = await fetchData(btn.dataset.file);
             return d ? { subject: btn.textContent, data: d } : null;
         });
