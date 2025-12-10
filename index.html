@@ -1,108 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GATE Planner & Insights</title>
 
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
   <style>
+    :root {
+      --primary: #ff6f61;
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.8);
+      --text-main: #1a202c;
+      --text-muted: #4a5568;
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      /* Reverted to the Vibrant Gradient */
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      text-align: center;
+      min-height: 100vh;
+      color: var(--text-main);
       overflow-x: hidden;
     }
 
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 30px;
+      padding: 60px 40px;
+      box-shadow: var(--shadow-xl);
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+      animation: zoomIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     h1 {
-      font-size: 40px;
-      color: #ff6f61;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-      animation: fadeInDown 0.8s ease-out;
+      font-size: 3.5rem;
+      margin: 0 0 10px 0;
+      letter-spacing: -1.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      /* Gradient Text */
+      background: linear-gradient(135deg, #ff6f61 0%, #d53f8c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: slideDown 0.8s ease-out;
+    }
+
+    h1 i {
+      font-size: 3.5rem;
+      background: none;
+      -webkit-text-fill-color: #ff6f61; 
     }
 
     p {
-      font-size: 16px;
-      color: #555;
-      margin-bottom: 40px;
-      animation: fadeInUp 1s ease-out;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 50px;
+      font-weight: 500;
+      opacity: 0.9;
+      animation: slideUp 0.8s ease-out 0.1s backwards;
     }
 
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 25px;
-      justify-content: center;
-      animation: fadeIn 1s ease-in;
+      width: 100%;
     }
 
-    .main-btn {
-      background: white;
-      color: #ff6f61;
-      border: 2px solid #ff6f61;
-      border-radius: 15px;
-      padding: 18px 40px;
-      font-size: 18px;
-      font-weight: 600;
+    .nav-card {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 20px;
+      padding: 30px 20px;
       cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-      transform: translateY(0);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      box-shadow: var(--shadow-card);
+      text-decoration: none;
+      color: var(--text-main);
+      position: relative;
+      overflow: hidden;
     }
 
-    .main-btn:hover {
-      background: #ff6f61;
-      color: white;
-      box-shadow: 0 8px 20px rgba(255,111,97,0.3);
-      transform: translateY(-5px);
+    /* Hover Effects */
+    .nav-card:hover {
+      transform: translateY(-8px);
+      background: #ffffff;
+      box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
     }
+
+    .nav-card i {
+      font-size: 3rem;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .nav-card:hover i {
+      transform: scale(1.2) rotate(8deg);
+    }
+
+    .nav-card span {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    /* Card Specific Colors (Borders & Icons) */
+    .card-study:hover { border-bottom: 4px solid #ff6f61; }
+    .card-study i { color: #ff6f61; }
+
+    .card-insights:hover { border-bottom: 4px solid #3182ce; }
+    .card-insights i { color: #3182ce; }
+
+    .card-strategy:hover { border-bottom: 4px solid #805ad5; }
+    .card-strategy i { color: #805ad5; }
+
+    .card-calendar:hover { border-bottom: 4px solid #38a169; }
+    .card-calendar i { color: #38a169; }
 
     .footer {
-      position: absolute;
-      bottom: 20px;
-      font-size: 14px;
-      color: #888;
+      margin-top: 50px;
+      font-size: 0.95rem;
+      color: #718096;
+      font-weight: 500;
       animation: fadeIn 1.5s ease-in;
     }
 
-    @keyframes fadeInDown {
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slideDown {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    @keyframes fadeInUp {
+    @keyframes slideUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
     @media (max-width: 600px) {
-      h1 { font-size: 32px; }
-      .main-btn { width: 80%; font-size: 16px; }
+      .container { padding: 30px 20px; }
+      h1 { font-size: 2.2rem; }
+      .button-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
-  <h1>🎯 GATE Planner</h1>
-  <p>Plan, analyze, and visualize your GATE preparation effortlessly</p>
+  
+  <div class="container">
+    <h1><i class="ph-duotone ph-graduation-cap"></i> GATE Planner</h1>
+    <p>Your centralized hub for preparation, analysis, and strategy.</p>
 
-  <div class="button-container">
-    <button class="main-btn" onclick="window.location.href='gate_sub.html'">📘 Study Planner</button>
-    <button class="main-btn" onclick="window.location.href='insights.html'">📊 Subject Insights</button>
-    <button class="main-btn" onclick="window.location.href='calendar.html'">📅 Calendar</button>
+    <div class="button-grid">
+      
+      <!-- Study Planner -->
+      <a href="gate_sub.html" class="nav-card card-study">
+        <i class="ph-duotone ph-books"></i>
+        <span>Study Planner</span>
+      </a>
+
+      <!-- Subject Insights -->
+      <a href="insights.html" class="nav-card card-insights">
+        <i class="ph-duotone ph-chart-polar"></i>
+        <span>Subject Insights</span>
+      </a>
+
+      <!-- Strategy Generator -->
+      <a href="strategy.html" class="nav-card card-strategy">
+        <i class="ph-duotone ph-compass"></i>
+        <span>Strategy Generator</span>
+      </a>
+
+      <!-- Calendar -->
+      <a href="calendar.html" class="nav-card card-calendar">
+        <i class="ph-duotone ph-calendar-check"></i>
+        <span>Calendar</span>
+      </a>
+
+    </div>
+
+    <div class="footer">© 2025 GATE Prep Visualizer</div>
   </div>
 
-  <div class="footer">© 2025 GATE Prep Visualizer</div>
 </body>
 </html>
