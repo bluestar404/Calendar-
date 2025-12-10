@@ -1,133 +1,65 @@
-<div align="center">
+# GATE Planner & Insights
 
-<h1>GATE Planner & Insights</h1>
+**A centralized strategic hub for GATE exam preparation.**
 
-<p>
-<b>A centralized strategic hub for GATE exam preparation.</b>
-</p>
+[![Deployment](https://img.shields.io/badge/DEPLOYMENT-LIVE-brightgreen?style=for-the-badge&logo=github)](https://bluestar404.github.io/Calendar-/)
+[![Version](https://img.shields.io/badge/Version-1.0.0-blueviolet?style=for-the-badge)](https://github.com/bluestar404/Calendar-/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-<!-- Badges Section -->
+## Explore Features
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [Report Bug](https://github.com/bluestar404/Calendar-/issues)
 
-<p>
-<a href="https://bluestar404.github.io/Calendar-/">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/DEPLOYMENT-LIVE-brightgreen%3Fstyle%3Dfor-the-badge%26logo%3Dgithub" alt="Deployment" />
-</a>
-<a href="#">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/VERSION-1.0.0-blue%3Fstyle%3Dfor-the-badge" alt="Version" />
-</a>
-<a href="#">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/LICENSE-MIT-orange%3Fstyle%3Dfor-the-badge" alt="License" />
-</a>
-</p>
+---
 
-<p>
-<a href="#key-features">Explore Features</a>
-·
-<a href="#tech-stack">Tech Stack</a>
-·
-<a href="https://www.google.com/search?q=https://github.com/bluestar404/Calendar-/issues">Report Bug</a>
-</p>
+## About The Project
 
-</div>
+**GATE Planner & Insights** is a data-driven dashboard designed to help students prepare for the Graduate Aptitude Test in Engineering (GATE). Unlike traditional to-do lists, this application focuses on strategic visualization.
 
-<br />
+It analyzes past year question (PYQ) data to generate actionable insights, applies the **Pareto Principle (80/20 Rule)** to identify high-yield topics, and provides a feasibility timeline to keep preparation on track.
 
-About The Project
+---
 
-GATE Planner & Insights is a data-driven dashboard designed to help students prepare for the Graduate Aptitude Test in Engineering (GATE). Unlike traditional to-do lists, this application focuses on strategic visualization.
+## Key Features
 
-It analyzes past year question (PYQ) data to generate actionable insights, applies the Pareto Principle (80/20 Rule) to identify high-yield topics, and provides a feasibility timeline to keep preparation on track.
+- **Topic Weightage Analysis:**  
+  Visualize which topics carry the most marks using interactive **Bar** and **Polar** charts.
 
-<br />
+- **Concentration Metrics:**  
+  Instantly identify the top 5 topics that make up the majority of a subject's score.
 
-Key Features
+- **Pareto Mode (80/20):**  
+  A dedicated mode that filters the syllabus into "Vital Few" (Top 50% impact) and "Trivial Many".
 
-Data-Driven Insights
+- **Roadmap Generator:**  
+  Auto-calculates a phased study plan based on the days remaining until the exam.
 
-Topic Weightage Analysis: Visualize which topics carry the most marks using interactive Bar and Polar charts.
+- **Burndown Charts:**  
+  Visualizes the "Ideal Path to Victory" vs. current progress.
 
-Concentration Metrics: Instantly identify the top 5 topics that make up the majority of a subject's score.
+- **Glassmorphism UI:**  
+  A premium, translucent design aesthetic with animated gradients.
 
-Strategic Tools
+---
 
-Pareto Mode (80/20): A dedicated mode that filters the syllabus into "Vital Few" (Top 50% impact) and "Trivial Many".
+## Tech Stack
 
-Roadmap Generator: Auto-calculates a phased study plan based on the days remaining until the exam.
+| **Component**   | **Technology** | **Description**                                         |
+|-----------------|----------------|---------------------------------------------------------|
+| **Structure**   | HTML5          | Semantic markup structure.                             |
+| **Styling**     | CSS3           | CSS Variables, Keyframe Animations, Flexbox/Grid.       |
+| **Scripting**   | JavaScript     | Vanilla JS for logic, DOM manipulation, and data fetching. |
+| **Charts**      | Chart.js       | Rendering interactive bars, donuts, and line charts.   |
+| **Icons**       | Phosphor Icons | Professional icon family for UI elements.              |
 
-Burndown Charts: Visualizes the "Ideal Path to Victory" vs. current progress.
+---
 
-Modern Experience
-
-Glassmorphism UI: A premium, translucent design aesthetic with animated gradients.
-
-Interactive Visuals: Powered by Chart.js for responsive and animated data plotting.
-
-Professional Iconography: Integrated Phosphor Icons for a cohesive look.
-
-<br />
-
-Tech Stack
-
-Component
-
-Technology
-
-Description
-
-Structure
-
-HTML5
-
-Semantic markup structure.
-
-Styling
-
-CSS3
-
-CSS Variables, Keyframe Animations, Flexbox/Grid.
-
-Scripting
-
-JavaScript
-
-Vanilla JS for logic, DOM manipulation, and data fetching.
-
-Charts
-
-Chart.js
-
-Rendering interactive bars, donuts, and line charts.
-
-Icons
-
-Phosphor Icons
-
-Professional icon family for UI elements.
-
-<br />
-
-Getting Started
+## Getting Started
 
 To run this project locally, you simply need a web browser. No backend server or Node.js installation is required.
 
-Clone the repository:
+1. **Clone the repository:**
 
-git clone [https://github.com/bluestar404/Calendar-.git](https://github.com/bluestar404/Calendar-.git)
-
-
-Navigate to the directory:
-
-cd Calendar-
-
-
-Open the application:
-
-Double-click landing.html to start.
-
-Note: For JSON fetching to work without CORS issues on some browsers, it is recommended to use the Live Server extension in VS Code.
-
-<br />
-
-<div align="center">
-<p>Made for Engineering Students</p>
-</div>
+   ```bash
+   git clone https://github.com/bluestar404/Calendar-.git
