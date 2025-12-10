@@ -1,19 +1,32 @@
 <div align="center">
+
 <h1>GATE Planner & Insights</h1>
 
 <p>
 <b>A centralized strategic hub for GATE exam preparation.</b>
 </p>
 
+<!-- Badges Section -->
+
 <p>
-<a href="https://bluestar404.github.io/Calendar-/">View Live Demo</a>
-·
+<a href="https://bluestar404.github.io/Calendar-/">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/DEPLOYMENT-LIVE-brightgreen%3Fstyle%3Dfor-the-badge%26logo%3Dgithub" alt="Deployment" />
+</a>
+<a href="#">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/VERSION-1.0.0-blue%3Fstyle%3Dfor-the-badge" alt="Version" />
+</a>
+<a href="#">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/LICENSE-MIT-orange%3Fstyle%3Dfor-the-badge" alt="License" />
+</a>
+</p>
+
+<p>
 <a href="#key-features">Explore Features</a>
 ·
 <a href="#tech-stack">Tech Stack</a>
+·
+<a href="https://www.google.com/search?q=https://github.com/bluestar404/Calendar-/issues">Report Bug</a>
 </p>
-
-<br />
 
 </div>
 
@@ -24,6 +37,8 @@ About The Project
 GATE Planner & Insights is a data-driven dashboard designed to help students prepare for the Graduate Aptitude Test in Engineering (GATE). Unlike traditional to-do lists, this application focuses on strategic visualization.
 
 It analyzes past year question (PYQ) data to generate actionable insights, applies the Pareto Principle (80/20 Rule) to identify high-yield topics, and provides a feasibility timeline to keep preparation on track.
+
+<br />
 
 Key Features
 
@@ -48,6 +63,8 @@ Glassmorphism UI: A premium, translucent design aesthetic with animated gradient
 Interactive Visuals: Powered by Chart.js for responsive and animated data plotting.
 
 Professional Iconography: Integrated Phosphor Icons for a cohesive look.
+
+<br />
 
 Tech Stack
 
@@ -86,6 +103,8 @@ Icons
 Phosphor Icons
 
 Professional icon family for UI elements.
+
+<br />
 
 Getting Started
 
